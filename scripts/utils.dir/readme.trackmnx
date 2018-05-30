@@ -1,0 +1,69 @@
+trackmnx
+--------
+
+Kevin Keay 23/8/2006
+
+This program is part of the cyclcone tracking software.
+To compile it go to the cyclone root directory (cyc.dir),
+then to track.dir and type:
+
+make trackmn
+
+The executable (trackmnx) will be placed in: cyc.dir/cycbin
+
+ Usage: trackmnx [-FulIvtdD] [-i infile [-R]] [-o outfile] thist or trackfile
+  
+    -i: input file specifying data manipulations
+    -o: output data file (otherwise std output)
+    -F  formatted input file expected
+    -u  unformatted output file to be used
+    -l  unformatted output file with namelist
+    -I  full list of instruction parameters
+    -v  track numbers at start of each day
+    -t  track summaries
+    -f  full track histories
+    -R  renumber tracks
+    -C  assume chart track format
+    -D  write diagnostics
+
+Notes:
+
+At this stage, only the relevant features will be described.
+The main use of this program is restrict the cyclone tracks (trkdat) file 
+to: (1) a particular time period (2) a minimum duration (in days).
+A namelist instruction file is used to set the required parameters (-i option).
+
+Examples:
+
+(1) Assume that we want to restrict the tracks to the period June 2 1994
+to July 27 1994. A suitable namelist instruction file (intrkmn.test) is:
+
+ &nmltrkmn  dastrt=940602,hrstrt=0,dastop=940727,hrstop=0,dttrk=0.0,
+            ioptk=999,cctk=0.,dptk=0.,iopgl=999,ccgl=0.,dpgl=0.,
+            delt=999.,
+ &end
+
+Here we have set dastrt=940602 (start date) and dastop=940727
+(end date). We can set the start and end times too (hrstrt,hrstop).
+We can perform this restriction via:
+
+trackmnx -F -i intrkmn.test -o edtracks trkdat.test
+
+The file edtracks contains only the restricted tracks.
+
+(2) If we simply wish to retain tracks of duration >= 2 days then
+the following namelist (intrkmn.2day) will suffice:
+
+ &nmltrkmn  dastrt=0,hrstrt=0,dastop=999999,hrstop=0,dttrk=2.0,
+            ioptk=999,cctk=0.,dptk=0.,iopgl=999,ccgl=0.,dpgl=0.,
+            delt=999.,
+ &end
+
+Here we have set dttrk=2.0 (default is 0.0 i.e. all tracks, including
+single points). Note: dttrk may be fractional e..g dttrk=3.5 (3.5 days).
+
+We can perform this restriction via:
+
+trackmnx -F -i intrkmn.2day -o edtracks.2day trkdat.test
+
+The file edtracks.2day contains only the tracks >= 2 days in duration.

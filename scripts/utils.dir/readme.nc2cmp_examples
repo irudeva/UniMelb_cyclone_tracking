@@ -1,0 +1,185 @@
+Some examples
+-------------
+
+(1)
+read_nc2cmp -i slp.2004.nc -o k1.cmp -u slp -v PMSL -r NCEP -s 0.01 -U hPa -m 1
+
+Based on ncdump:
+
+netcdf slp.2004 {
+dimensions:
+	lon = 144 ;
+	lat = 73 ;
+	time = UNLIMITED ; // (1464 currently)
+variables:
+	float lat(lat) ;
+		lat:units = "degrees_north" ;
+		lat:actual_range = 90.f, -90.f ;
+		lat:long_name = "Latitude" ;
+	float lon(lon) ;
+		lon:units = "degrees_east" ;
+		lon:long_name = "Longitude" ;
+		lon:actual_range = 0.f, 357.5f ;
+	double time(time) ;
+		time:units = "hours since 1-1-1 00:00:0.0" ;
+		time:long_name = "Time" ;
+		time:actual_range = 17557968., 17566746. ;
+		time:delta_t = "0000-00-00 06:00:00" ;
+	short slp(time, lat, lon) ;
+		slp:long_name = "4xDaily Sea Level Pressure" ;
+		slp:valid_range = 87000.f, 115000.f ;
+		slp:actual_range = 92700.f, 111370.f ;
+		slp:units = "Pascals" ;
+		slp:add_offset = 119765.f ;
+		slp:scale_factor = 1.f ;
+		slp:missing_value = 32766s ;
+		slp:precision = 0s ;
+		slp:least_significant_digit = -1s ;
+		slp:GRIB_id = 2s ;
+		slp:GRIB_name = "PRMSL" ;
+		slp:var_desc = "Sea Level Pressure\n",
+    "P" ;
+		slp:dataset = "NMC Reanalysis\n",
+    "L" ;
+		slp:level_desc = "Sea Level\n",
+    "I" ;
+		slp:statistic = "Individual Obs\n",
+    "I" ;
+		slp:parent_stat = "Other\n",
+    "-" ;
+
+// global attributes:
+		:Conventions = "COARDS" ;
+		:title = "4x daily NMC reanalysis (2004)" ;
+		:base_date = 2004s, 1s, 1s ;
+		:history = "created 2004/01/03 by Hoop (netCDF2.3)" ;
+		:description = "Data is from NMC initialized reanalysis\n",
+    "(4x/day).  It consists of most variables interpolated to\n",
+    "pressure surfaces from model (sigma) surfaces." ;
+		:platform = "Model" ;
+}
+
+(2)
+read_nc2cmp -i hgt.58.0500.nc -o k2.cmp -u hgt -v Z500 L -r NCEP -U m -m 1
+
+Based on ncdump:
+
+netcdf hgt.58.0500 {
+dimensions:
+	time = 1460 ;
+	lat = 73 ;
+	lon = 144 ;
+variables:
+	double time(time) ;
+		time:units = "hours since 1-1-1 00:00:0.0" ;
+		time:long_name = "Time" ;
+		time:actual_range = 17154744., 17163498. ;
+		time:delta_t = "0000-00-00 06:00:00" ;
+	float lat(lat) ;
+		lat:units = "degrees_north" ;
+		lat:actual_range = 90.f, -90.f ;
+		lat:long_name = "Latitude" ;
+	float lon(lon) ;
+		lon:units = "degrees_east" ;
+		lon:long_name = "Longitude" ;
+		lon:actual_range = 0.f, 357.5f ;
+	short hgt(time, lat, lon) ;
+		hgt:long_name = "4xDaily Geopotential height" ;
+		hgt:actual_range = -513.f, 32308.f ;
+		hgt:valid_range = -700.f, 35000.f ;
+		hgt:units = "m" ;
+		hgt:add_offset = 32066.f ;
+		hgt:scale_factor = 1.f ;
+		hgt:missing_value = 32766s ;
+		hgt:precision = 0s ;
+		hgt:least_significant_digit = 0s ;
+		hgt:GRIB_id = 7s ;
+		hgt:GRIB_name = "HGT" ;
+		hgt:var_desc = "Geopotential height\n",
+    "H" ;
+		hgt:dataset = "NMC Reanalysis\n",
+    "L" ;
+		hgt:level_desc = "Multiple levels\n",
+    "F" ;
+		hgt:statistic = "Individual Obs\n",
+    "I" ;
+		hgt:parent_stat = "Other\n",
+    "-" ;
+}
+
+(3)
+read_nc2cmp -i xaeqaa.pmsl.nc -o j.cmp -d "longitude0,latitude0,time0" -u m1s16i222p0p -l z1_msl -L 1 -r NIWA -s 0.01 -v PMSL -U hPa -m 1
+
+Based on ncdump:
+
+netcdf xaeqaa.pmsl {
+dimensions:
+	longitude0 = 192 ;
+	latitude0 = 145 ;
+	z1_msl = 1 ;
+	time0 = 40 ;
+variables:
+	double longitude0(longitude0) ;
+		longitude0:modulo = 360. ;
+		longitude0:units = "degrees_east" ;
+		longitude0:axis = "X" ;
+		longitude0:standard_name = "grid_longitude" ;
+		longitude0:point_spacing = "even" ;
+	double latitude0(latitude0) ;
+		latitude0:units = "degrees_north" ;
+		latitude0:axis = "Y" ;
+		latitude0:standard_name = "grid_latitude" ;
+		latitude0:point_spacing = "even" ;
+	double z1_msl(z1_msl) ;
+		z1_msl:axis = "Z" ;
+		z1_msl:long_name = "mean sea level pressure" ;
+	double time0(time0) ;
+		time0:calendar = "360_day" ;
+		time0:units = "days since 1970-01-01 00:00:0" ;
+		time0:axis = "T" ;
+		time0:standard_name = "time" ;
+	double m1s16i222p0p(time0, z1_msl, latitude0, longitude0) ;
+		m1s16i222p0p:long_name = "PRESSURE AT MEAN SEA LEVEL" ;
+		m1s16i222p0p:units = "Pa" ;
+		m1s16i222p0p:_FillValue = -1073741824. ;
+		m1s16i222p0p:missing_value = -1073741824. ;
+		m1s16i222p0p:stash_model = 1 ;
+		m1s16i222p0p:stash_section = 16 ;
+		m1s16i222p0p:stash_item = 222 ;
+
+// global attributes:
+		:history = "PP/UM file reformatted by um2netcdf" ;
+		:input_uri = "xaeqaa.pih6610" ;
+		:input_word_length = 8 ;
+		:input_byte_ordering = "big_endian" ;
+		:input_file_format = "UM ancillary" ;
+		:institution = "NIWA" ;
+		:file_creation_date = "Mon Aug 14 01:58:57 2006" ;
+}
+
+
+Examples of -t option
+--------------------
+
+(1) ERA-Interim MSLP
+
+This is an extract from a C-shell script.
+Note the -s option: scaling from Pa to hPa (x 0.01).
+Use the -p option to specify the location of udunits.dat if is not in a common system folder.
+
+ set y = 2001  # Year
+ read_nc2cmp_test -i PMSL.nc -o MSLP.$y.erain.cmp -d "longitude,latitude,t" -u "MSL" -v "PMSL" -U "Pa" -l surface -L 1 -s 0.01 \
+   -r ERAIN -g 1.5x1.5DEG -p /home/kevin/bin/udunits.dat -t "${y}060100,${y}083118"
+
+(2) ERA-Interim geopotential height
+
+This is an extract from a C-shell script.
+Note the -s option: scaling from geopotential to height (x 0.101968 = 1/g).
+NCEP products are normally in units of metres and so don't need scaling.
+
+# Note: Need to divide by g = 9.807 i.e. * 0.101968
+
+ set y = 2001  # Year
+ read_nc2cmp_test -i j3.nc -o $L.$y.erain.cmp -d "longitude,latitude,time" -u "Z" -v "$L" -U "m" -s 0.101968 -l lev -L 1 \
+   -r ERAIN -g 1.5x1.5DEG -p /home/kevin/bin/udunits.dat -t "${y}060100,${y}083118"
+	  

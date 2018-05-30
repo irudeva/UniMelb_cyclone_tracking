@@ -1,0 +1,86 @@
+ Usage: readgribn [-g gaussfile][-n nceptfile]
+   [-1 catconfile]
+   [-deflFGNU][-c cid] [-cyc][-ncep2][-Y2K]
+   [-m model_name][-s scale_factor] -h hdr
+  
+ Note: For a Gaussian grid either -g or -G must be
+  specified (default: 2.5x2.5 deg. grid)
+  
+ Options: 
+  -1 catconfile: Output concatenated conmap file
+     (default: one file per record (map)
+  -c cid: Output file is: cid.yy[yy]mmddhh.cmp
+  -d: Debug
+  -e: Extra information in conmap header (ignored if -cyc specified)
+  -f: Output file is: dump.yy[yy]mmddhh.cmp
+    (useful if renaming is required later)
+  -g gaussfile: Gaussian grid is specified in file gaussfile
+  -h hdr: wgrib output corresponding to wgrib extracted binary file 'dump' 
+  -l: Output filename is lowercase (default: mixed)
+  -m model_name: e.g. ETA; use if not covered by-ncep, -ncep2 or -era40 options
+  -n nceptfile: Use descriptions specified in file nceptfile
+  -s scale_factor: Only used with geopotential height (Z)
+  -F: Uses forecast time to construct date-time (default: uses given date-time)
+  -G: Gaussian grid is specified in file: /home/kevin/grib/gaussgrid.dat
+  -N: Use descriptions specified in file: /home/kevin/grib/reanal_ncep.table.txt
+  -O "latinc,loninc,lat1,lat2,lon1,lon2" : user general lon-lat grid
+  -U "lat1,lat2,lon1,lon2" : user grid (subset of
+  regular 2.5x2.5 deg. grid only)
+  -cyc: Output conmap header compatible with cyclone tracking scheme
+  -era40: Output conmap header for ERA40 (default: NCEP)
+  -ncep2: Output conmap header for NCEP2 (default: NCEP)
+  -noflip: Don't flip latitude direction (default: flip)
+   Note: Check with: wgrib -V; if lats are in S -> N order then use -noflip
+  -Y2K: If 2 digit year is in range 00-20 assumes
+        4 digit year of form 20?? (default: year is 19??)
+ Example for MSLP data:
+   wgrib flx.lola.grib.mean.clim.y58-97  | grep PRES |
+   grep MSL | grep 58010100 | wgrib -i flx.lola.grib.mean.clim.y58-97 >! hdr
+   readgribn -h hdr
+ Part example for Gaussian surface data:
+   readgribn -G -h hdr.ICEC.sfc
+ Example using record numbers and NCEP2:
+   wgrib -d 123 msl.1979010106.grib >! hdr
+   readgribn -h hdr -ncep2
+   (output file: PRES.ncep2.79010106.cmp)
+   (if -l given: pres.ncep2.79010106.cmp)
+   ... and for the cyclone tracking scheme:
+   readgribn -h hdr -ncep2 -cyc
+   (output file: PMSL.ncep2.79010106.cmp)
+   (note PMSL instead of PRES)
+ Example using wgrib -i and a multiple record grib file:
+   wgrib uv.grib | wgrib -i uv.grib >! hdr.uv
+   readgribn -h hdr.uv -ncep2
+   (this will produce a series of conmap files)
+  
+Notes
+-----
+
+(1) -G is not valid for 'outside' users unless changes are
+made to the program. See: readgribn.f
+Use -g instead. The NCEP/NCEP2 Reanalysis Gaussian grid is given
+in: gaussgrid.dat. This is in the same format as a GrADS control file.
+
+(2) -N is not valid for 'outside' users unless changes are
+made to the program. See: readgribn.f and: reanal_ncep.table.txt
+fro an example.
+It is not really important especially for the most common variables.
+In any case -N or -n only affects the name of a variable as written
+in the conmap header and the method of constructing the output 
+filename. The data are not affected.
+
+Example
+-------
+
+This is for data from the ETA model. In this case the grid is regular (0.5 x 0.5 degrees)
+over South Africa: 13W - 53E, 48S - 9S. For many GRIB files the latitude order is N -> S
+but in this case it is S -> N. Hence the -noflip option is specified. Check the GRIB file 
+with wgrib -V. The output ('conmap' format) is written to a concatenated (multi-map) file 
+called test_pmsl.cmp.
+
+wgrib -4yr 2006010900.grb | grep MSL | wgrib -4yr -i 2006010900.grb > ! hdr
+readgribn -h hdr -O "0.5,0.5,-48,-9,-13,53" -cyc -F -l -m ETA -noflip -1 test_pmsl.cmp
+
+The individual maps may be extracted with the utility splitcon. See: readme.splitcon and 
+type: splitcon  more more information.
+

@@ -1,0 +1,21 @@
+excycdat
+========
+
+Kevin Keay Aug 23 2006
+
+ Usage: excycdat cycdatfile "date-time" e.g. "981201 06"
+
+Note the *quotes* around date-time.
+The output file is always named excyc.dat - it has the
+same form (cycdat) as the input file. 
+It contains a single record from cycdatfile matching the
+specified date-time - an error message will be displayed
+if there is no match.
+
+Example
+-------
+
+excycdat cycdat.test "981201 06"
+
+The output cycdat file (excyc.dat) contains the record
+for 981201 06 i.e. Dec 1 1998 0600UTC.

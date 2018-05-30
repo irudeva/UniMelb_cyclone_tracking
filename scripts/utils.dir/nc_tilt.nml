@@ -1,0 +1,26 @@
+ &nmcdl
+   var= 'TILT',
+   attr_var_long_name= 'Cyclone tilt',
+   attr_var_units= 'Compass direction',
+   gattr_desc= 'MSLP-500 hPa; Map 1: NNE 2: ENE 3: ESE 4: SSE 5: SSW 6: WSW 7: WNW 8: NNW'
+ &end
+
+# Use date_time_type= 'Y' as first number in header as a dummy year
+   date_time_type= 'Y',
+   date_time_fmt= '(I3)',
+
+or simply omit these to use an internal dummy date-time
+
+Then:
+
+cmp2cdl4 -n nc_tilt.nml -i tilt2.cmp -o j.cdl
+ncgen -o tilt.nc j.cdl
+
+In GrADS:
+
+sdfopen tilt.nc
+set t 6            This will be map 6 == WSW
+set gxout grfill   Shade grid boxes
+d tilt
+set gxout grid     Display actual values
+d tilt

@@ -1,0 +1,34 @@
+statconmap (statconmap7)
+------------------------
+
+Kevin Keay 23/8/2006
+
+ Usage: statconmap [-1][-A][-C][-V] conmapfiles avefile sdfile varfile cntfile
+ Options: 
+   1: Concatenated input conmap file (single file)
+   A: Output sum(x)= ave*(n) instead of ave
+   C: Assumes header is from tstatx - adjust year value
+      and output dates as yyyymm (omit dd)
+      Default: Date is unchanged i.e. yymmdd
+   V: Output sum((x-xbar)**2)= var*(n-1) instead of var
+ Example: statconmap -C SD.*.cmp SD.{ave,sd,var,cnt}
+  
+Examples
+--------
+
+(1) statconmap -C SD.{1987,1990,1995}.cmp {ave,sd,var,cnt}.SD.cmp
+
+The file ave.SD.cmp contains the gridpoint average of the three
+files SD.1987.cmp, SD.1990.cmp and SD.1995.cmp (SD is system density).
+Note that the average is computed at *each* gridpoint, allowing for
+missing values represented by the code 99999.9.
+The standard deviation, variance and count (number of 'live' or valid
+data values at each gridpoint) are saved in sd.SD.cmp, var.SD.cmp and 
+cnt.SD.cmp. The -C option is merely a change to the conmap header
+(description), not the actual data.
+
+(2) statconmap -1 SD.1981-1990.cmp {ave,sd,var,cnt}.SD.cmp
+
+The concatenated conmap file SD.1981-1990.cmp contains a set of maps
+(grids or fields) to be processed.
+

@@ -1,0 +1,66 @@
+cmp2cdl4
+--------
+
+Converts a CMP file to CDL format which may then be converted to NetCDF
+using the standard NetCDF utility ncgen.
+
+ Usage: cmp2cdl4 [-h] -n nmlist -i cmpfile -o cdlfile
+  Options:
+    h: Help screen
+     Example: cmp2cdl4 -n nmlist.txt -i cstatdat.cmp -o test.cdl
+              ncgen -b test.cdl (uses name in cdl file)
+	      ncgen -o test.nc test.cdl 
+  
+ Namelist: 
+  namelist /nmcdl/ var,
+ * attr_var_long_name, attr_var_units,
+ * gattr_desc, gattr_hist,
+ * date_time_fmt, date_time_type,
+ * nc_name, time_unlimited,
+ * map1, map2
+  
+ Example namelist:
+  &nmcdl
+    var= 'H',
+    date_time_type= 'YM',
+    date_time_fmt= '(18x,I4,I2)',
+    attr_var_long_name= 'H',
+    attr_var_units= 'per Kelvin',
+    gattr_desc= 'Monthly H (year-month) based
+  on monthly HadISST T and NCEP
+  Reanalysis E; Period Jan 1979 - Dec 2005',
+    nc_name= 'my_H',
+    map1= 5,
+    map2= 10,
+    time_unlimited=F,
+    gattr_hist= 'Created by Kevin Keay',
+  &end
+  
+Here is an example namelist file from a vertical tracing case (saved as: nc_tilt.nml).
+
+ &nmcdl
+   var= 'TILT',
+   attr_var_long_name= 'Cyclone tilt',
+   attr_var_units= 'Compass direction',
+   gattr_desc= 'MSLP-500 hPa; Map 1: NNE 2: ENE 3: ESE 4: SSE 5: SSW 6: WSW 7: WNW 8: NNW'
+ &end
+
+# Use date_time_type= 'Y' as first number in header as a dummy year
+   date_time_type= 'Y',
+   date_time_fmt= '(I3)',
+
+or simply omit these to use an internal dummy date-time
+
+Then:
+
+cmp2cdl4 -n nc_tilt.nml -i tilt2.cmp -o j.cdl
+ncgen -o tilt.nc j.cdl
+
+In GrADS:
+
+sdfopen tilt.nc
+set t 6            This will be map 6 == WSW
+set gxout grfill   Shade grid boxes
+d tilt
+set gxout grid     Display actual values
+d tilt

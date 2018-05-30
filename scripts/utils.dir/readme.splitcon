@@ -1,0 +1,117 @@
+splitcon
+========
+
+Kevin Keay 10/6/2006
+
+Revised: 26/8/2009
+
+This program is useful for extracting a particular map from a multi-map
+(concatenated) conmap file. The output map is also in the 'conmap' format.
+It may also be used to dump the contents of
+a particular map as well as listing the set of maps. The program is
+intended for a number of purposes so there are a number of options.
+The program can extract a maximum of 1500 maps at 1 degree resolution.
+
+Compilation:
+
+  g77 -o splitcon splitcon.f
+
+For usage type: splitcon
+
+ Usage: splitcon [-b base][-d][-h][-L][-l][-m mapno]
+   [-n][-H][-M mapno1,mapno2] concat_conmapfile
+    Options:
+      b: base - basename for output maps i.e. base.0001 etc (default: split)
+      4: when used with -n use 4 digit time (default: 2 digits)
+      d: when used with -m the output file is def.cmp
+      h: when used with -m prints conmap to dump.lis
+      l: when used with -n the output file is in lowercase (default: preserve case)
+      m: mapno - map number to output (default: all)
+      n: Construct name from header (default: see -b)
+      r: Remove lon 360
+      w: If lon 0 present, add lon 360
+      H: Remove blanks from variable in header e.g. 'T 1000' -> T1000
+      L: prints list of maps and conmap headers
+      M: mapno1,mapno2 - range of map numbers to output (default: all)
+
+Examples
+--------
+
+For purposes of illustration we will consider the extraction of 5 maps from a NetCDF file
+containing mean sea level pressure for 2004. The maps are saved as the concatenated conmap file 
+called test.cmp. Note that -s 0.01 converts Pa to hPa (mb). A suitable command to create test.cmp is:
+
+ read_nc2cmp -i slp.2004.nc -o test.cmp -d "lon,lat,time" -v PMSL -u slp -U "'MB'" -r NCEP -s 0.01 -m 5
+
+  splitcon test.cmp
+
+This will extract all maps from test.cmp. They are given the default filenames split.0001 - split.0004
+and are all in the 'conmap' format.
+
+A list of maps in the concatenated file is given by:
+
+  splitcon -L test.cmp
+  splitcon -L test.cmp >! j.lis        (to redirect the screen output to a file called j.lis)
+
+This produces the listing:
+
+   1 PMSL                          NCEP      20040101 0000    MB           2.5x2.5DEG
+   2 PMSL                          NCEP      20040101 0600    MB           2.5x2.5DEG
+   3 PMSL                          NCEP      20040101 1200    MB           2.5x2.5DEG
+   4 PMSL                          NCEP      20040101 1800    MB           2.5x2.5DEG
+   5 PMSL                          NCEP      20040102 0000    MB           2.5x2.5DEG
+ No. of conmap files:  5
+
+The following examples extract a particular map (the third).
+  splitcon -m 3 test.cmp
+
+This will extract the third map to split.0003.
+
+  splitcon -m 3 -d test.cmp
+
+This will extract the third map to def.cmp (a default file).
+
+  splitcon -m 3 -n test.cmp
+
+This will extract the third map to file based on the contents of the 80 character conmap header.
+In many cases this is designed to have an 8 character variable name e.g. PMSL, a 5 character identifer e.g. NCEP
+and a date-time in certain locations of the header. Hence in this particular case the output file is
+PMSL.NCEP.2004010112.cmp.
+
+  splitcon -m 3 -n -l test.cmp
+
+This is similar to the previous example except the output name is forced to be lowercase.
+Hence the output file is pmsl.ncep.2004010112.cmp.
+
+  splitcon -m 3 -h -d test.cmp
+
+This will create a file called dump.lis (text format) showing the contents of the third map.
+It is best to use the -d option so that def.cmp is created since this is intended to be 'disposable'.
+The file dump.lis shows the conmap header, longitudes, latitudes and data values at each grid point.
+
+To see the contents of a single map e.g. pmsl.ncep.2004010112.cmp, use:
+
+  splitcon -m 3 -h -d pmsl.ncep.2004010112.cmp
+
+and inspect dump.lis.
+
+To extract all maps omit the -m option:
+
+  splitcon -n -l test.cmp
+
+In this case all 5 maps will be extracted to the files:
+
+ pmsl.ncep.2004010100.cmp  pmsl.ncep.2004010106.cmp  pmsl.ncep.2004010112.cmp
+ pmsl.ncep.2004010118.cmp  pmsl.ncep.2004010200.cmp
+
+If you want filenames of the form prefix.nnnn then use the -b option:
+
+  splitcon -b Pressure test.cmp
+
+which creates the files Pressure.0001, ..., Pressure.0005.
+
+  splitcon -m 3 -b Pressure test.cmp
+
+would simply create Pressure.0003.
+
+

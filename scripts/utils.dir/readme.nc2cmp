@@ -1,0 +1,400 @@
+A Fortran program to read 'usual' NetCDF files
+==============================================
+
+Kevin Keay 1/8/2006
+
+The program read_nc2cmp will read 'usual' NetCDF files that have a variable
+var (time, level, lat, lon)
+
+in *this* order as indicated by the output of ncdump -h.
+Note that the dimensions and variables may have different names
+e.g. longitude instead of lon.
+
+To compile:
+
+g77 -o read_nc2cmp{,.f} -lnetcdf -ludunits
+
+i.e. you need the NetCDF and UDUNITS libraries.
+You also need the include files netcdf.inc and udunits.inc
+
+If you type the name of the program you get a brief usage message:
+
+read_nc2cmp
+
+ Usage: read_nc2cmp [-D idbg]
+ [-i ncfile][-o cmpfile][-d "lon,lat,time"][-u uservar]
+ [-l levelvar][-L ilev][-r rtype][-s uscal][-v vtype][-U units][-m no_maps]
+ [-p udunits][-M "map1,map2"]
+  D: 0= None 1= Basic 2= Verbose 3= Print dimension arrays to file fort.10
+
+
+Our network
+-----------
+
+For our Linux PCs the program is already complied - use:
+
+/home/kevin/bin/pc/read_nc2cmp
+
+
+Other (external) machines
+-------------------------
+
+You may need to give the location of the UDUNITS data file with the
+-p option:
+
+-p '/usr/local/etc/udunits.dat'
+
+or change the source code at line 172:
+
+udpath= '/usr/local/etc/udunits.dat'
+
+This is only necessary if the file is not in the usual place.
+
+(1) ERA40 with no level variable
+--------------------------------
+
+The output from ncdump for hgt.2002.Jun.500hPa.nc in folder ncdata is:
+
+
+netcdf hgt.2002.Jun.500hPa {
+dimensions:
+	longitude = 144 ;
+	latitude = 73 ;
+	time = UNLIMITED ; // (120 currently)
+variables:
+	float longitude(longitude) ;
+		longitude:units = "degrees_east" ;
+		longitude:long_name = "longitude" ;
+	float latitude(latitude) ;
+		latitude:units = "degrees_north" ;
+		latitude:long_name = "latitude" ;
+	int time(time) ;
+		time:units = "hours since 1900-01-01 00:00:0.0" ;
+		time:long_name = "time" ;
+	short z(time, latitude, longitude) ;
+		z:scale_factor = 0.217434325978148 ;
+		z:add_offset = 51602.802096924 ;
+		z:_FillValue = -32767s ;
+		z:missing_value = -32767s ;
+		z:units = "m**2 s**-2" ;
+		z:long_name = "Geopotential" ;
+
+// global attributes:
+		:Conventions = "CF-1.0" ;
+		:history = "2006-05-11 03:18:51 GMT by mars2netcdf-0.92" ;
+}
+
+Hence:
+
+read_nc2cmp  -i ncdata/hgt.2002.Jun.500hPa.nc -o j.cmp -d "longitude,latitude,time" -u z -D 3 -r ERA40 -m 2
+
+The user variable is geopotentail (z) and the three basic dimensions are longitude, latitude and time.
+The dataset is ERA40 and as a test we will output the first two maps. Omit -m option to get all maps.
+-D is the debug option; 3 prints the dimensions to a file called fort.10. You can omit -D option.
+NOTE: For ERA40 geopotential, the program will divide by g= 9.807 m s**-2 to give geopotential height (m).
+
+
+(2) ERA40 with a level variable
+-------------------------------
+
+The output from ncdump for hgt.200208.nc in folder ncdata is:
+
+
+netcdf hgt.200208 {
+dimensions:
+	longitude = 144 ;
+	latitude = 73 ;
+	levelist = 23 ;
+	time = UNLIMITED ; // (62 currently)
+variables:
+	float longitude(longitude) ;
+		longitude:units = "degrees_east" ;
+		longitude:long_name = "longitude" ;
+	float latitude(latitude) ;
+		latitude:units = "degrees_north" ;
+		latitude:long_name = "latitude" ;
+	int levelist(levelist) ;
+		levelist:units = "millibars" ;
+		levelist:long_name = "pressure_level" ;
+	int time(time) ;
+		time:units = "hours since 1900-01-01 00:00:0.0" ;
+		time:long_name = "time" ;
+	short z(time, levelist, latitude, longitude) ;
+		z:scale_factor = 7.53787087081502 ;
+		z:add_offset = 241940.397676004 ;
+		z:_FillValue = -32767s ;
+		z:missing_value = -32767s ;
+		z:units = "m**2 s**-2" ;
+		z:long_name = "Geopotential" ;
+
+// global attributes:
+		:Conventions = "CF-1.0" ;
+		:history = "2006-05-08 06:31:19 GMT by mars2netcdf-0.92" ;
+}
+
+
+There are 23 levels. If you use ncdump -v levelist then you can see the levels:
+
+
+ levelist = 1, 2, 3, 5, 7, 10, 20, 30, 50, 70, 100, 150, 200, 250, 300, 400, 
+    500, 600, 700, 775, 850, 925, 1000 ;
+
+If you want the 500 hPa level then you require levelist(17).
+
+Hence:
+
+read_nc2cmp -i ncdata/hgt.200208.nc -o j.cmp -d "longitude,latitude,time" -u z -D 3 -r ERA40 -l levelist -L 17 -m 2
+
+
+(3) NCEP2 with no level variable
+--------------------------------
+
+The output from ncdump for hgt.58.0500.nc in the current folder is:
+
+
+netcdf hgt.58.0500 {
+dimensions:
+	time = 1460 ;
+	lat = 73 ;
+	lon = 144 ;
+variables:
+	double time(time) ;
+		time:units = "hours since 1-1-1 00:00:0.0" ;
+		time:long_name = "Time" ;
+		time:actual_range = 17154744., 17163498. ;
+		time:delta_t = "0000-00-00 06:00:00" ;
+	float lat(lat) ;
+		lat:units = "degrees_north" ;
+		lat:actual_range = 90.f, -90.f ;
+		lat:long_name = "Latitude" ;
+	float lon(lon) ;
+		lon:units = "degrees_east" ;
+		lon:long_name = "Longitude" ;
+		lon:actual_range = 0.f, 357.5f ;
+	short hgt(time, lat, lon) ;
+		hgt:long_name = "4xDaily Geopotential height" ;
+		hgt:actual_range = -513.f, 32308.f ;
+		hgt:valid_range = -700.f, 35000.f ;
+		hgt:units = "m" ;
+		hgt:add_offset = 32066.f ;
+		hgt:scale_factor = 1.f ;
+		hgt:missing_value = 32766s ;
+		hgt:precision = 0s ;
+		hgt:least_significant_digit = 0s ;
+		hgt:GRIB_id = 7s ;
+		hgt:GRIB_name = "HGT" ;
+		hgt:var_desc = "Geopotential height\n",
+    "H" ;
+		hgt:dataset = "NMC Reanalysis\n",
+    "L" ;
+		hgt:level_desc = "Multiple levels\n",
+    "F" ;
+		hgt:statistic = "Individual Obs\n",
+    "I" ;
+		hgt:parent_stat = "Other\n",
+    "-" ;
+}
+
+Hence:
+
+read_nc2cmp -i hgt.58.0500.nc -o j.cmp -d "lon,lat,time" -u hgt -D 2 -r NCEP2 -m 2
+
+Note that the variable is called hgt and the dataset is NCEP2. The -D option with 2
+gives some extra information. Leave out the -m option to give all maps.
+
+For NCEP2 or NCEP data you probably just need to change the -u option (and
+-v and -U options for variables other than geopotential height). See (4) below.
+Look at the ncdump of the file (ncdump -h yourfile.nc) and check. In the above
+example, under Variables:
+
+short hgt(time, lat, lon) o
+
+Hence the variable is hgt => -u hgt
+
+
+(4) NCEP with a level variable
+------------------------------
+
+netcdf shum.2005.500 {
+dimensions:
+	lon = 144 ;
+	lat = 73 ;
+	level = 1 ;
+	time = UNLIMITED ; // (1460 currently)
+variables:
+	float level(level) ;
+		level:units = "millibar" ;
+		level:actual_range = 500.f, 500.f ;
+		level:long_name = "Level" ;
+		level:positive = "down" ;
+		level:GRIB_id = 100s ;
+		level:GRIB_name = "hPa" ;
+	float lat(lat) ;
+		lat:units = "degrees_north" ;
+		lat:actual_range = 90.f, -90.f ;
+		lat:long_name = "Latitude" ;
+	float lon(lon) ;
+		lon:units = "degrees_east" ;
+		lon:long_name = "Longitude" ;
+		lon:actual_range = 0.f, 357.5f ;
+	double time(time) ;
+		time:units = "hours since 1-1-1 00:00:0.0" ;
+		time:long_name = "Time" ;
+		time:actual_range = 17566752., 17575506. ;
+		time:delta_t = "0000-00-00 06:00:00" ;
+	short shum(time, level, lat, lon) ;
+		shum:long_name = "4xDaily specific humidity" ;
+		shum:valid_range = -1.e-04f, 0.06543f ;
+		shum:actual_range = 0.f, 0.009062f ;
+		shum:units = "kg/kg" ;
+		shum:add_offset = 0.032666f ;
+		shum:scale_factor = 1.e-06f ;
+		shum:missing_value = 32766s ;
+		shum:precision = 6s ;
+		shum:least_significant_digit = 5s ;
+		shum:GRIB_id = 51s ;
+		shum:GRIB_name = "SPFH" ;
+		shum:var_desc = "Specific humidity\n",
+    "Q" ;
+		shum:dataset = "NMC Reanalysis\n",
+    "L" ;
+		shum:level_desc = "Multiple levels\n",
+    "F" ;
+		shum:statistic = "Individual Obs\n",
+    "I" ;
+		shum:parent_stat = "Other\n",
+    "-" ;
+
+// global attributes:
+		:Conventions = "COARDS" ;
+		:title = "4x daily NMC reanalysis (2005)" ;
+		:history = "Wed May 31 18:13:10 2006: /usr/local/bin/ncrcat -O -d level,500.000000 -d lat,-90.000000,90.000000 -d lon,0.000000,357.500000 -d time,0,1459 /Datasets/ncep.reanalysis/pressure/shum.2005.nc /Public/www/128.250.120.93.150.18.13.8.nc\n",
+    "created 2005/01/03 by Hoop (netCDF2.3)" ;
+		:description = "Data is from NCEP initialized reanalysis\n",
+    "(4x/day).  It consists of most variables interpolated to\n",
+    "pressure surfaces from model (sigma) surfaces." ;
+		:platform = "Model" ;
+}
+
+Based on the above NetCDF header dump the following command with create a concatenated conmap file with a useful header for each map:
+
+read_nc2cmp -i shum.2005.500.nc -o j.cmp -d "lon,lat,time" -u shum -D 2 -r NCEP -m 2 -l level -L 1 -v SHUM500 -U "'kg/kg'"
+
+We set the conmap variable name to be SHUM500 (-v) and the units to be kg/kg (-U) (note the extra single quotes to ensure that
+the / is treated as text).
+
+
+(5) NCEP Mean sea level pressure
+--------------------------------
+
+For brief usage type: read_nc2cmp
+
+ Usage: read_nc2cmp [-D idbg]
+ [-i ncfile][-o cmpfile][-d "lon,lat,time"][-u uservar]
+ [-l levelvar][-L ilev][-r rtype][-s uscal][-v vtype][-U units][-m no_maps]
+ [-p udunits][-M "map1,map2"]
+  D: 0= None 1= Basic 2= Verbose 3= Print dimension arrays to file fort.10
+
+The -d option is set for NCEP and NCEP2 by default, assuming that the longitude, latitude
+and time variables are named lon, lat and time.
+
+Consider the header dump of the NetCDF file slp.2004.nc i.e. ncdump -h slp.2004.nc
+
+
+netcdf slp.2004 {
+dimensions:
+	lon = 144 ;
+	lat = 73 ;
+	time = UNLIMITED ; // (1464 currently)
+variables:
+	float lat(lat) ;
+		lat:units = "degrees_north" ;
+		lat:actual_range = 90.f, -90.f ;
+		lat:long_name = "Latitude" ;
+	float lon(lon) ;
+		lon:units = "degrees_east" ;
+		lon:long_name = "Longitude" ;
+		lon:actual_range = 0.f, 357.5f ;
+	double time(time) ;
+		time:units = "hours since 1-1-1 00:00:0.0" ;
+		time:long_name = "Time" ;
+		time:actual_range = 17557968., 17566746. ;
+		time:delta_t = "0000-00-00 06:00:00" ;
+	short slp(time, lat, lon) ;
+		slp:long_name = "4xDaily Sea Level Pressure" ;
+		slp:valid_range = 87000.f, 115000.f ;
+		slp:actual_range = 92700.f, 111370.f ;
+		slp:units = "Pascals" ;
+		slp:add_offset = 119765.f ;
+		slp:scale_factor = 1.f ;
+		slp:missing_value = 32766s ;
+		slp:precision = 0s ;
+		slp:least_significant_digit = -1s ;
+		slp:GRIB_id = 2s ;
+		slp:GRIB_name = "PRMSL" ;
+		slp:var_desc = "Sea Level Pressure\n",
+    "P" ;
+		slp:dataset = "NMC Reanalysis\n",
+    "L" ;
+		slp:level_desc = "Sea Level\n",
+    "I" ;
+		slp:statistic = "Individual Obs\n",
+    "I" ;
+		slp:parent_stat = "Other\n",
+    "-" ;
+
+// global attributes:
+		:Conventions = "COARDS" ;
+		:title = "4x daily NMC reanalysis (2004)" ;
+		:base_date = 2004s, 1s, 1s ;
+		:history = "created 2004/01/03 by Hoop (netCDF2.3)" ;
+		:description = "Data is from NMC initialized reanalysis\n",
+    "(4x/day).  It consists of most variables interpolated to\n",
+    "pressure surfaces from model (sigma) surfaces." ;
+		:platform = "Model" ;
+}
+
+
+(1) To decode maps 5-8 of this mean sea level pressure file use the following command:
+
+read_nc2cmp -i slp.2004.nc -o jj.cmp -u slp -r NCEP -v PMSL -s 0.01 -M "5,8"
+
+The pressure variable is named slp (-u option).
+We need to scale the pressure in Pa to hPa i.e. apply a scaler of 0.01 (-s option).
+The -r and -v options are for setting the conmap header for the cyclone tracking scheme.
+The -M option gives the map range to be decoded i.e. maps 5-8.
+
+The screen output is: 
+
+ NOTE: User scaler:   0.00999999978
+ Output map range:  5 -  8
+ NetCDF file opened successfully (ncid= 3)
+
+ Inquiring about variables ...
+ Reading longitudes ...
+ Reading latitudes ...
+ Reading times ...
+ Reading attributes ...
+ No. of maps to be extracted:  4
+ Reading user variable ...
+     5:PMSL                          NCEP      20040102 0000    MB           2.5x2.5DEG
+     6:PMSL                          NCEP      20040102 0600    MB           2.5x2.5DEG
+     7:PMSL                          NCEP      20040102 1200    MB           2.5x2.5DEG
+     8:PMSL                          NCEP      20040102 1800    MB           2.5x2.5DEG
+ NetCDF file closed successfully (ncid= 3)
+ Output conmap file: jj.cmp
+ Finished!
+
+The file jj.cmp contains the four decoded maps.
+
+
+(2) The first 10 maps may be decoded with:
+
+read_nc2cmp -i slp.2004.nc -o jj.cmp -u slp -r NCEP -v PMSL -s 0.01 -m 10
+
+
+(3) The entire file (1464 maps) may be decoded with:
+
+read_nc2cmp -i slp.2004.nc -o pmsl.2004.cmp -u slp -r NCEP -v PMSL -s 0.01
+
+Kevin Keay 1/8/2006

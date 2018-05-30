@@ -1,0 +1,57 @@
+#
+
+# Compilation of utilities
+#
+# Kevin Keay 4/12/2006
+#
+# Revised: 26/8/2009
+
+# Destination of executables
+
+setenv UBIN ../ubin
+
+# Fortran compiler
+
+set FC = g77
+
+# C compiler
+
+set CC = gcc
+
+# Most utilities
+
+set ff = ( \
+calcparams \
+cmp2cdl4 \
+catcon2cdl \
+cycadjtime \
+excycdat \
+readcmp \
+readgribn \
+splitcon \
+stat2cdl \
+statconmap \
+trk2map )
+
+foreach f ($ff)
+  echo "Compiling" $f "..."
+  $FC -o $UBIN/$f $f.f
+  ls -l $UBIN/$f
+end
+
+# Compilation of read_nc2cmp
+# Requires NetCDF and UDUNITS to be installed;
+# requires netcdf.inc, udunits.inc
+
+set f = read_nc2cmp
+echo "Compiling" $f "..."
+$FC -o $UBIN/$f $f.f -lnetcdf -ludunits
+ls -l $UBIN/$f
+
+# Compilation owf wgrib
+
+set f = wgrib
+echo "Compiling" $f "..."
+$CC -o $UBIN/$f $f.c
+
+exit

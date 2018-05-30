@@ -1,0 +1,19 @@
+readcmp
+=======
+
+Kevin Keay Aug 23 2006
+
+ Usage: readcmp [-F fmt][-o outputfile] cmpfile
+ Options: 
+  F: Fortran format for listing e.g. '(F10.4)'
+  o: Output listing file
+
+ Examples:
+ 
+ (1) readcmp -F '(F10.4)' pmsl.cmp
+ The dump (listing) of the conmap file (pmsl.cmp)
+ appears on the screen; could pipe it or redirect
+ e.g.  readcmp ... | more, readcmp ... >! dump.txt
+
+ (2) readcmp -F '(F10.4)' -o dump.txt pmsl.cmp
+ The dump is written to dump.txt.

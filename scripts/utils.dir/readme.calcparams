@@ -1,0 +1,68 @@
+calcparams
+----------
+
+A tool to aid in setting certain cyclone finding and tracking parameters.
+
+ Usage: calcparams [-n nmlfile] plevel
+    plevel: Pressure level in hPa [100,1000]
+    nmlfile: Namelist file (namelist: nmcalcp)
+    See: calcparams.nml for defaults
+ Examples:
+    (1) calcparams 750.
+    (2) calcparams -n params.nml 500.
+
+See: calcparams.nml
+
+&nmcalcp
+ nlev=10
+ p= 1000., 925., 850., 700., 600., 500., 400., 300., 200., 100.
+ a= 0.09, 0.147, 0.126, 0.078, 0.042, 0., 0., 0., 0., 0.
+ z= 110.5, 768.75, 1457., 3012., 4206., 5574., 7185., 9163., 11774., 15796.
+ rd= 5., 5., 5.5, 5.5, 6., 6., 6., 6., 6., 6. 
+ fs= 2., 2., 1.9, 1.5, 1.2, 1., 1., 1., 1., 1. 
+ c1= 1.66, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7
+ c2= 1.66, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7
+ cw= 5.60, 5.95, 5.95, 5.95, 5.95, 5.95, 5.95, 5.95, 5.95, 5.95
+ r= 1.2, 1.1, 1.0, 0.9, 0.8, 0.7, 0.58, 0.46, 0.34, 0.22
+&end
+
+c * nlev: number of levels of parameters
+      data nlev /10/
+c * p: pressure level in hPa
+      data p /1000., 925., 850., 700., 600., 500., 400., 300.,
+     *      200., 100., 10*0./
+c * a: alpha - Eunpa''s NCEP2 1000 hPa results use alpha=0.09
+c   but the formula (equation 3.2, p37 PhD thesis) would
+c   give alpha= 0.157; I am using 0.09 @ 1000 hPa
+      data a /0.09, 0.147, 0.126, 0.078, 0.042, 0., 0., 0.,
+     *      0., 0., 10*0./
+c * zsmax= z + 1000. zscr= z +200 where z is mean z
+c   See: http://hurri.kean.edu/~yoh/calculations/standatm/StdAtm.html
+c   - Pressure-Height Relationship in Standard Atmosphere
+c   Formula is:
+c
+c   z = 44330.77 * (1 - (p/p0) ** (0.19025) )
+c
+c   where: p0 = 1013.25 hPa 
+c
+c   Strictly this applues to within the troposphere (up to 11 km)
+c   so the value at 100 hPa is approximate
+c
+      data z /110.5, 768.75, 1457., 3012., 4206., 5574.,
+     * 7185., 9163., 11774., 15796., 10*0./ 
+c * r: rdpgrd
+      data rd /5., 5., 5.5, 5.5, 6., 6., 6., 6., 6., 6., 10*0./
+c * c1: cmnc1; c2: cmnc2
+      data c1 /1.66, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7,
+     * 1.7, 1.7, 10*0./
+      data c2 /1.66, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7,
+     * 1.7, 1.7, 10*0./
+c * cw: cmncw
+      data cw /5.60, 9 * 5.95, 10*0./
+c * r: rhoa - last two values are an extrapolation
+      data r /1.2, 1.1, 1.0, 0.9, 0.8, 0.7, 0.58, 0.46,
+     * 0.34, 0.22, 10*0./
+c * fs: fsteer
+c   Eun-pa''s table has 1.7 @ 700 hPa but her template
+c   has 1.5 - I am using the latter
+      data fs /2., 2., 1.9, 1.5, 1.2, 1., 1., 1., 1., 1., 10*0./

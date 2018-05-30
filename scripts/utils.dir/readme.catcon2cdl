@@ -1,0 +1,39 @@
+catcon2cdl
+==========
+
+Kevin Keay Aug 23 2006
+
+This is a simple program to convert a concatenated conmap file
+and output the *set* of maps in CDL format.
+The CDL file can then by processed by the NetCDF utility ncgen
+to generate a NetCDF file that can be read by a number of
+software packages e.g. GrADS, Matlab.
+Note: The time dimension is a dummy variable i.e. not a 
+'real' time.
+
+For usage type: catcon2cdl
+
+ Usage: catcon2cdl infile outfile
+ Example: catcon2cdl cstatdat.test j.cdl
+          ncgen -o j.nc j.cdl 
+
+Example
+-------
+
+Assume that we have a set of maps of system density (SD)
+that are annual averages i.e. SD.1991.cmp, SD.1992.cmp,
+SD.1997,cmp, SD.2000.cmp.
+We can create a concatenated conmap file by:
+
+cat SD.{1991,1992,1997,2000}.cmp >! cat.SD.cmp
+
+To create a NetCDF file:
+
+ catcon2cdl cat.SD.cmp j.cdl
+ ncgen -o cat.SD.nc j.cdl
+
+The NetCDF file cat.SD.nc may be opened by another package
+e.g. in GrADS using sdfopen.
+
+Note: You need to have the NetCDF utility ncgen installed
+on your system for the NetCDF file to be created.

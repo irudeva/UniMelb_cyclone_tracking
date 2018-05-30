@@ -1,0 +1,28 @@
+wgrib
+-----
+
+Portable Grib decoder for NCEP/NCAR Reanalysis etc.
+   it slices, dices    v1.7.3.1 (8-5-99) Wesley Ebisuzaki
+   usage: wgrib [grib file] [options]
+
+Inventory/diagnostic-output selections
+   -s/-v                   short/verbose inventory
+   -V                      diagnostic output (not inventory)
+   (none)                  regular inventory
+ Options
+   -PDS/-PDS10             print PDS in hex/decimal
+   -GDS/-GDS10             print GDS in hex/decimal
+   -verf                   print forecast verification time
+   -ncep_opn/-ncep_rean    default T62 NCEP grib table
+   -4yr                    print year using 4 digits
+Decoding GRIB selection
+   -d [record number|all]  decode record number
+   -p [byte position]      decode record at byte position
+   -i                      decode controlled by stdin (inventory list)
+   (none)                  no decoding
+ Options
+   -text/-ieee/-grib/-bin  convert to text/ieee/grib/bin (default)
+   -nh/-h                  output will have no headers/headers (default)
+   -H                      output will include PDS and GDS (-bin/-ieee only)
+   -append                 append to output file
+   -o [file]               output file name, 'dump' is default

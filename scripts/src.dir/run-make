@@ -1,0 +1,26 @@
+#!/bin/csh -f
+pwd
+cd ..
+if !(-e cycbin) mkdir cycbin
+cd src.dir
+echo "Binaries will go in ../../cycbin"
+cd cycloc_hr.dir
+unzip zsrc*
+make cycloc
+cd ..
+cd track_hr.dir
+unzip zsrc*
+make track
+make trackmn
+cd ..
+cd tstat_hr.dir
+unzip zsrc*
+make tstat
+echo "Binaries"
+pwd
+cd ../../cycbin
+ls -l
+cd ../src.dir
+pwd
+echo "Finished!"
+exit

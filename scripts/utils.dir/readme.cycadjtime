@@ -1,0 +1,83 @@
+cycadjtime
+==========
+
+Kevin Keay June 14 2006
+
+Unfortunately the tracking software is designed for 2 digit years
+e.g. 82 rather than 1982. This causes problems when you want to
+track from 1999 to 2000 (interpreted as 99 to 00).
+
+We plan to alter the software to use 4 digit years but this won't
+happen for a while since it requires changes throughout the
+whole package.
+
+A working solution is to use the program cycadjtime.
+This *adds* an offset to the year in the conmap file header.
+It is *intended* for conmap files of the form:
+
+ var.reanl.yyyymmddhh.cmp
+
+e.g. pmsl.era40.2002070118.cmp
+
+To compile:
+
+g77 -o cycadjtime cycadjtime.f
+
+For usage type: cycadjtime
+
+ Usage: cycadjtime -y yoff -i icmpfile [-o ocmpfile]
+ Options: 
+  i: input conmap file with proper header for cyclocx
+ e.g. MSLP header: 
+ PMSL                          ERA40     
+ 20020703 0000    MB           2.5x2.5DEG
+  o: output conmap file with adjusted date-time
+     If ocmpfile is not given then ocmpfile
+  will be icmpfile with a modified date-time
+  y: year offset (-ve or +ve)  - this is defined according to the 4 digit year
+ Examples of -y option: 
+  (1) NCEP2: -y -1960 would allow: 
+      1979 -> 0019, ..., 1999 -> 0039, 2000 -> 0040,
+  2001 -> 0041 (19, ..., 39,40,41 as used by cyclocx)
+    i.e. add 1960 to recover the real year
+  (1) ERA40: -y -1920 would allow: 
+      1957 -> 0037, ..., 1999 -> 0079, 2000 -> 0080,
+  2001 -> 0081 (37, ..., 79,80,81 as used by cyclocx)
+    i.e. add 1920 to recover the real year
+ Note: Both of these choices preserve *leap* years
+ Examples:
+ (1) cycadjtime -y -1960 -i pmsl.ncep2.2000013118.cmp -o j40011318.cmp
+ (2) cycadjtime -y -1920 -i pmsl.era40.2000013118.cmp
+     Output file is: pmsl.era40.0080013118.cmp
+
+---
+
+There are a number of ways to use the program:
+
+(1) You can adjust *all* conmap files and locate, track and compute
+statistics. You just have to remember that you need to add the
+*same* value to each year to obtain the 'real' year.
+
+(2) You can adjust time periods which are affected by the 99 to 00
+problem e.g. Nov 1999 - March 2000.
+
+A note of caution
+-----------------
+
+Note that the offset has a sign associated with it
+e.g. -y -1920 means add -1920 (or subtract 1920) from a year value.
+
+Furthermore:
+
+cycadjtime -y -1920 -i pmsl.era40.2002070118.cmp
+cycadjtime -y 1920 -i pmsl.era40.0082070118.cmp -o j.cmp
+
+would result in j.cmp being identical to pmsl.era40.2002070118.cmp.
+
+Also:
+
+cycadjtime -y -1920 -i pmsl.era40.2002070118.cmp
+cycadjtime -y 1920 -i pmsl.era40.0082070118.cmp
+
+would result in  pmsl.era40.2002070118.cmp -> pmsl.era40.0082070118.cmp
+and then pmsl.era40.0082070118.cmp -> pmsl.era40.2002070118.cmp

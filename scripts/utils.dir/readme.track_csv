@@ -1,0 +1,54 @@
+CSV version of track file
+-------------------------
+
+Kevin Keay 18/9/2006
+
+
+Track:       Track number from track (trkdat) file. This number changes when a new track is encountered.
+Track-point: If there are np track points this goes from 1 ... np.
+Time:        An arbitrary linear time coordinate in days. Usually 0 is taken to be the date-time of the 
+             first date-time to be processed.
+Date:        Date of track point - YYYYMMDD.
+Hour:        Hour of track point - HHHH.
+IO:          Track point IO code
+             0= Strong closed 10= Weak closed
+	     1= Strong open   11= Weak open
+	     2= Ross' special open (rare)
+	     'Strong' is relative and determined in cyclocx by parameter cmncw (in this case 0.7)
+Lon:         Longitude of track point (pressure centre)
+Lat:         Latitude of track point (pressure centre)
+PC:          Central pressure of cyclone (hPa)
+CC:          Area averaged Laplacian of pressure of cyclone (hPa/deg.lat.**2) where 1 deg.lat. = 111 km (approx.)
+DP:          Depth of cyclone (hPa)
+R0:          Radius of cyclone (deg.lat.)
+UE:          Eastward component of cyclone steering velocity (m/s)
+UN:          Northward component of cyclone steering velocity (m/s)
+
+Example 
+-------
+
+Track,Track-point,Time,Date,Hour,IO,Lon,Lat,PC,CC,DP,R0,UE,VN
+  3120,  1,  42.0000,20010101,   0,10, 165.500, -13.360,1008.310,   0.240,   1.697,   6.799,  -1.582,  -0.443
+  3120,  2,  42.2500,20010101, 600,10, 161.550, -10.020,1006.250,   0.299,   2.388,   7.532,  -0.711,  -0.025
+  3120,  3,  42.5000,20010101,1200,10, 164.770, -12.630,1008.300,   0.240,   1.982,   6.866,  -1.693,  -0.439
+  3120,  4,  42.7500,20010101,1800,11, 165.350, -14.260,1007.590,   0.237,   2.353,   5.967,  -1.851,   0.021
+  3120,  5,  43.0000,20010102,   0,10, 162.110, -13.440,1007.390,   0.255,   2.504,   6.774,  -1.699,   0.337
+  3120,  6,  43.2500,20010102, 600,11, 161.340, -12.290,1006.820,   0.242,   1.984,   6.199,  -1.903,   0.518
+  3120,  7,  43.5000,20010102,1200,10, 160.730, -13.680,1007.770,   0.274,   2.302,   6.576,  -2.199,   0.143
+  3120,  8,  43.7500,20010102,1800,11, 162.070, -15.820,1007.240,   0.310,   1.794,   4.114,  -3.411,  -0.600
+  3322,  1,  44.2500,20010103, 600,10, 159.860, -15.000,1005.130,   0.429,   2.175,   5.495,  -3.141,   0.072
+  3322,  2,  44.5000,20010103,1200,10, 159.060, -14.430,1006.710,   0.367,   2.247,   5.530,  -2.183,  -0.149
+  3322,  3,  44.7500,20010103,1800,10, 158.110, -15.230,1004.870,   0.456,   2.513,   6.150,  -2.739,   0.230
+  3322,  4,  45.0000,20010104,   0,10, 157.460, -14.780,1006.120,   0.399,   1.721,   5.231,  -2.835,   1.008
+  3322,  5,  45.2500,20010104, 600,11, 154.170, -13.340,1005.590,   0.248,   1.551,   5.303,  -2.276,  -0.297
+  3322,  6,  45.5000,20010104,1200,10, 154.470, -13.450,1006.480,   0.304,   2.211,   5.295,  -2.174,   0.448
+  3322,  7,  45.7500,20010104,1800,10, 156.540, -12.630,1005.450,   0.253,   2.488,   7.232,  -1.193,   0.058
+  3322,  8,  46.0000,20010105,   0,10, 159.110, -13.770,1007.520,   0.260,   2.014,   5.929,  -0.715,   0.684
+  3348,  1,  44.7500,20010103,1800,11, 162.750, -15.710,1005.690,   0.333,   1.896,   5.510,  -1.587,  -2.332
+  3348,  2,  45.0000,20010104,   0,10, 164.360, -17.130,1006.470,   0.540,   1.793,   4.117,  -2.940,  -1.578
+  3348,  3,  45.2500,20010104, 600,10, 164.340, -18.320,1005.800,   0.589,   2.139,   4.638,  -1.965,  -1.206
+  ...
+
+The first track is 3120 with 8 track points, the second track is 3322 with 8 track points (just happens to be 8 
+like the first) etc.
+

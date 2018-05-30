@@ -1,0 +1,31 @@
+stat2cdl
+========
+
+Kevin Keay June 14 2006
+
+This is a simple program to extract a *single* map from a 
+statdat file and output that map in CDL format.
+The CDL file can then by processed by the NetCDF utility ncgen
+to generate a NetCDF file that can be read by a number of
+software packages e.g. GrADS, Matlab.
+
+For usage type: stat2cdl
+
+ Usage: stat2cdl var infile outfile
+ Example: stat2cdl SD statdat.test j.cdl
+          ncgen -o SD.nc j.cdl 
+  
+As an example there is a 'cut-down' statdat file called statdat.test2
+which has 3 maps (SD, DP, FG) (FG is the flux of cyclogenesis).
+To create a NetCDF file of the system density (SD):
+
+ stat2cdl SD statdat.test2 j.cdl
+ ncgen -o SD.nc j.cdl
+
+Similarly for FG:
+
+ stat2cdl FG statdat.test2 j.cdl
+ ncgen -o FG.nc j.cdl
+
+Note: You need to have the NetCDF utility ncgen installed
+on your system for the NetCDF file to be created.

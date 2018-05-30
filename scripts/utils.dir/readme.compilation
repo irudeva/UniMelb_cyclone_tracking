@@ -1,0 +1,7 @@
+To compile these programs:
+
+g77 -o progexe prog.f
+
+Move the executables to:
+
+../../ubin

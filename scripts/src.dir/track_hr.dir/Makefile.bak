@@ -1,0 +1,48 @@
+#
+# (1) 8/9/2006 : allows for 200 centres per track (max seenm so far is 142)
+
+FC = g77
+FFLAGS = -c  -ffortran-bounds-check -finit-local-zero
+
+SRCS.TRAKA  = track.F cycio_1.F trackio.F update.F splithist.F lasthist.F match.F predict.F prob.F tracksum.F predvl.F 
+SRCS.TRAKB = timedif.f srchls.f ngtopt.f globtest.f bisplcf.f isplcf.f llexpand.f psconv.f getwds.f qmapread.f
+SRCS.TRMNA = trackmn.F trackio.F
+SRCS.TRFMA = trackfm.F trackio.F
+SRCS.TRFMB = ngtopt.f psconv.f isplcf.f rlconv.f
+
+OBJS.TRAK  = ${SRCS.TRAKA:.F=.o}  ${SRCS.TRAKB:.f=.o}
+OBJS.TRFM  = ${SRCS.TRFMA:.F=.o}  ${SRCS.TRFMB:.f=.o}
+OBJS.TRMN  = ${SRCS.TRMNA:.F=.o}  ${SRCS.TRFMB:.f=.o}
+
+track: depend.trak $(OBJS.TRAK)
+	$(FC) -o ../../cycbin/trackx.hr $(OBJS.TRAK)
+trackfm: depend.trfm $(OBJS.TRFM)
+	$(FC) -o ../../cycbin/trackfmx.hr $(OBJS.TRFM)
+trackmn: depend.trmn $(OBJS.TRMN)
+	$(FC) -o ../../cycbin/trackmnx.hr $(OBJS.TRMN)
+
+.F.o:
+	$(FC) ${FFLAGS} $<
+.f.o:
+	$(FC) ${FFLAGS} $<
+
+depend.trak:
+	makedepend  ${SRCS.TRAKA} -f Makefile
+depend.trfm:
+	makedepend  ${SRCS.TRFMA} -f Makefile
+depend.trmn:
+	makedepend  ${SRCS.TRMNA} -f Makefile
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.
+
+track.o: cyc1.h cyc2.h trk1.h trk2.h trk3.h
+cycio_1.o: cyc1.h cyc2.h
+trackio.o: cyc1.h trk1.h trk2.h
+update.o: cyc1.h trk1.h trk2.h trk3.h
+splithist.o: cyc1.h trk1.h trk2.h trk3.h
+lasthist.o: cyc1.h trk1.h trk2.h trk3.h
+match.o: cyc1.h trk1.h trk2.h trk3.h
+predict.o: cyc1.h trk1.h trk2.h trk3.h
+prob.o: cyc1.h trk1.h trk2.h trk3.h
+tracksum.o: cyc1.h trk1.h trk2.h trk3.h
+predvl.o: cyc1.h trk1.h trk2.h trk3.h
