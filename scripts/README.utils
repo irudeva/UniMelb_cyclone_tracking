@@ -1,0 +1,225 @@
+Utilities
+---------
+
+We include a number of useful utilities.
+See also: README.graphics for the graphics utilities: conmap, kmapline.
+The Fortran source code for these utilities is in:
+
+cyc.dir/utils.dir
+
+Most programs are compiled with:
+
+g77 -o prog prog.f
+
+e.g. g77 -o cycadjtime cycadjtime.f
+
+except for read_nc2cmp:
+
+g77 -o read_nc2cmp{,.f} -lnetcdf -ludunits
+
+i.e. you need the NetCDF and UDUNITS libraries.
+You also need the include files netcdf.inc and udunits.inc.
+
+However, there is a script:  run-compile
+which will compile *all* of the utilities and place them
+in cyc.dir/ubin.
+
+You may install these programs anywhere on your system.
+For the purposes of interaction with the cyclone tracking software the binaries
+(executables) have been placed in:  cyc.dir/ubin
+
+
+The utilities are:
+
+read_nc2cmp : Convert NetCDF to 'conmap' format for input to the cyclone tracking
+	      software (cyclocx)
+readgribn   : Convert GRIB to 'conmap' format for input to the cyclone tracking
+	      software (cyclocx)
+wgrib       : GRIB decoder by Wesley Ebisuzaki; used in conjunction with readgribn
+cycadjtime  : Adjust the date-time of a conmap file to allow the transition from 
+	      1999 to 2000 (the software uses two-digit years with 99 to 00 causing
+	      an error)
+excycdat    : Extracts a particular date-time record from a cyclone location (cycdat)
+	      file, mainly for use by conmap e.g. plotting of cyclone locations on a map
+splitcon    : Splits a concatenated conmap file into individual conmap files
+trackmnx    : This is used to manipulate or edit a cyclone tracks (trkdat) file
+trk2map     : Converts/edits a cyclone tracks (trkdat) file into 'mapline' format for
+	      subsequent plotting by kmapline
+stat2cdl    : Extracts a single map from a cyclone statistics (statdat) file and saves
+	      as a NetCDF CDL (text) file which can be processed by ncgen into a binary
+	      NetCDF file
+catcon2cdl  : Converts a concatenated conmap file to a NetCDF CDL (text) file which can
+	      be processed by ncgen into a binary NetCDF file
+statconmap  : Computes the gridpoint average, standard deviation and variance of a concatenated
+	      conmap file or set of conmap files and saves the results in conmap format
+readcmp     : Produces a text listing of a 'conmap' file
+
+
+read_nc2cmp
+-----------
+This may be used to convert certain kinds of NetCDF data to the 'conmap'
+format which is required for the first phase of the cyclone tracking
+scheme (determining cyclone locations). The NetCDF file should have a
+single variable e.g. mean sea level pressure, or the same variable at
+multiple levels e.g. geopotential height at 500, 800 hPa. The dimensions
+should be (time,latitude,longitude) or (level,time,latitude,longitude).
+The NetCDF data obtained from a number of web sites such as: 
+
+http://www.cdc.noaa.gov/cdc/data.ncep.reanalysis2.html  (NCEP Reanalysis 2)
+
+or:
+
+http://data.ecmwf.int/data/  (ECMWF Data Server)
+
+can usually be extracted to meet these criteria.
+
+See: readme.nc2cmp, readme.nc2cmp_examples
+
+
+readgribn
+---------
+
+Used in conjuction with wgrib to convert GRIB data to 'conmap' format.
+
+See: readme.readgribn, readme.wgrib
+
+
+wgrib
+-----
+
+Used in conjuction with readgribn to convert GRIB data to 'conmap' format.
+
+See: readme.readgribn, readme.wgrib
+
+
+cycadjtime
+----------
+This is used to handle the problem of the 1999 -> 2000 transition
+when only two-digit years are used, as in the cyclone tracking
+software. Type:
+
+cycadjtime
+
+for brief help and see:
+
+readme.cycadjtime
+
+for more details.
+In the future we may alter the software to accept four-digit years.
+
+
+excycdat
+--------
+This is used to extract a particular data-time record from a cyclone 
+locations (cycdat) file, mainly for use by conmap to plot symbols
+or cyclone ID numbers on a (pressure) map. Type:
+
+excycdat
+
+for brief help.
+
+
+splitcon
+--------
+This is used to split a concatenated conmap file into individual conmap files.
+It is used to restrict the input to the cyclone location phase (cyclocx) or
+to obtain a map for the plotting of cyclone locations (symbols or ID numbers).
+Type:
+
+splitcon
+
+for brief help and see:
+
+readme.splitcon
+
+for more details.
+
+
+trackmnx
+--------
+This is used to manipulate or edit a cyclone tracks (trkdat) file.
+Type:
+
+trackmnx
+
+for brief help and see:
+
+readme.trackmnx
+
+for more details.
+
+
+trk2map
+-------
+Converts a cyclone tracks (trkdat) file into 'mapline' format for
+subsequent plotting by kmapline. Some basic editing is allowed such as
+the track region but it is suggested that the utility trackmnx be used
+to restrict date-time range annd track duration. Type:
+
+trk2map
+
+for brief help and see:
+
+readme.trk2map
+
+for more details.
+
+
+stat2cdl
+--------
+Extracts a single map from a cyclone statistics (statdat) file and saves
+as a NetCDF CDL (text) file which can be processed by ncgen into a binary
+NetCDF file. Type:
+
+stat2cdl
+
+for brief help and see:
+
+readme.stat2cdl
+
+for more details.
+The NetCDF file output by ncgen may be read into other software such as GrADS.
+Note: The time dimension is a dummy counter i.e. not true time.
+
+
+catcon2cdl
+----------
+Converts a concatenated conmap file to a NetCDF CDL (text) file which can
+be processed by ncgen into a binary NetCDF file. Type:
+
+catcon2cdl
+
+for brief help and see:
+
+readme.catcon2cdl
+
+for more details.
+The NetCDF file output by ncgen may be read into other software such as GrADS.
+Note: The time dimension is a dummy counter i.e. not true time.
+
+
+statconmap
+----------
+Computes the gridpoint average, standard deviation and variance of a concatenated
+conmap file or set of conmap files and saves the results in conmap format. Type:
+
+statconmap
+
+for brief help and see:
+
+readme.statconmap
+
+for more details.
+
+
+readcmp
+-------
+Produces a text listing of a 'conmap' file. Type:
+
+readcmp
+
+for brief help and see:
+
+readme.readcmp
+
+for more details.

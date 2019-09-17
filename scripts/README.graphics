@@ -1,0 +1,66 @@
+Graphics utilities
+------------------
+
+The following graphics programs require NCAR Graphics to be installed on your system.
+
+The binaries are available at:
+
+http://www.earthsci.unimelb.edu.au/~kevin/cyc_L1.1
+
+zbin_ncarg.linux.zip   (Linux)
+
+You may install these programs anywhere on your system by unzipping the ZIP file
+to an appropriate location. However, it is recommended to go to the parent
+directory of cyc.dir e.g. /work/user if 'cyc.dir' is /work/user/cyc.dir
+and unzip the ZIP file from there - the binaries will automatically be extracted to:  cyc.dir/ubin
+For the purposes of interaction with the cyclone tracking software the binaries
+(executables) will automatically be extracted to: cyc.dir/ubin
+The zip files also contain some tests that will extracted to: cyc.dir/ncarg.dir/test
+There are some subdirectories:
+
+  ave     - see: readme.ave, readme.conmap
+  symbols - see: readme.symbols, readme.conmap
+  tracks  - see: readme.tracks
+
+You can try the examples (run*) in these folders.
+
+
+The current utilities are:
+
+conmap      : Plot a map (field or grid) in 'conmap' format including an overlay of
+	      symbols at cyclone locations; may be used to plot the cyclone statistics
+	      (statdat) files
+kmapline    : Plot cyclone tracks after preprocessing with trk2map
+
+
+conmap
+------
+
+This may be used to plot fields e.g. mean sea level pressure, including an overlay of 
+cyclone positions for a given time step. Type:
+
+conmap --help
+
+for brief help and:
+
+conmap --namelist
+
+to see some information about the namelist parameters (options -k, -K). See:
+
+readme.conmap
+
+for more details.
+
+
+kmapline
+--------
+
+This may be used to plot cyclone tracks. Type:
+
+kmapline 
+
+for brief help and see:
+
+readme.kmapline
+
+for more details.

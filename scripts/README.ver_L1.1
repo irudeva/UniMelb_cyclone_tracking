@@ -1,0 +1,201 @@
+README for cyclone tracking software L1.1
+=========================================
+
+Kevin Keay  Dec 5 2006
+
+
+Installation
+------------
+
+(1) Download: 
+
+http://www.earthsci.unimelb.edu.au/~kevin/cyc_L1.1/zcyccode.linux.L1.1.zip
+
+to a suitable folder on your system - for illustration, call it: /work/user
+Then:
+
+cd /work/user
+unzip zcyccode.linux.L1.1.zip
+
+A folder called cyc.dir will be created and the software extracted to it.
+You may regard the 'cyclone home directory' as /work/user/cyc.dir.
+
+If you have a Linux OS then you *may* be able to use the precompiled binaries.
+Download:
+
+http://www.earthsci.unimelb.edu.au/~kevin/cyc_L1.1/zcycbin.linux.L1.1.zip
+
+to: /work/user. Then:
+
+cd /work/user
+unzip zcycbin.linux.L1.1.zip
+
+The binaries will be placed in: cyc.dir/cycbin
+
+
+Compilation
+-----------
+
+If the binaries don't work then you will need to compile the programs:
+
+1. Follow the instructions below (quick compilation guide) to compile each program.
+   The main programs are automatically moved to the directory cyc.dir/cycbin.
+   Other programs (most utilities) are automatically moved to the directory cyc.dir/ubin
+   after compilation. The NCAR Graphics programs are in binary form and should
+   be unzipped into the directory cyc.dir/ubin - applies to conmap and kmapline.
+
+2. In most cases typing in the program name without arguments e.g. cyclocx,
+   will provide a quick usage (not fully implemented).
+
+
+Quick compilation guide
+-----------------------
+
+# Main programs
+
+These are assumed to reside in: cyc.dir/cycbin
+
+To make    go to         then
+
+cyclocx   cycloc.dir    type "make cycloc"
+trackx    track.dir     type "make track"
+tstatx    tstat.dir     type "make tstat"
+
+# Tracking scheme utilities 
+
+These are assumed to reside in: cyc.dir/cycbin
+
+To make    go to         then
+
+psfmx     cycloc.dir    type "make psfm"
+trackfmx  track.dir     type "make trackfm"
+trackmnx  track.dir     type "make trackmn"
+
+# Extra utilities
+
+These are assumed to reside in: cyc.dir/cycbin
+
+To make    go to                    then
+
+binswap   extra.dir/binswap.dir    type "make"
+fderivx   extra.dir/fderiv.dir     type "make"
+mapx      extra.dir/map.dir        type "make"
+statcycmm extra.dir/statcycmm.dir  type "make"
+
+
+General utilities
+-----------------
+
+If you have a Linux OS then you *may* be able to use the precompiled binaries.
+
+Download:
+
+http://www.earthsci.unimelb.edu.au/~kevin/cyc_L1.1/zubin.linux.zip
+
+to: /work/user. Then:
+
+cd /work/user
+unzip zubin.linux.zip
+
+The binaries will be placed in: cyc.dir/ubin
+
+If the binaries don't work then you will need to compile the programs.
+
+Download:
+
+http://www.earthsci.unimelb.edu.au/~kevin/cyc_L1.1/zutils.linux.zip
+
+to:  /work/user
+Then:
+
+cd /work/user
+unzip zutils.linux.zip
+
+Go to: cyc.dir/utils.dir
+and type: run-compile
+The various binaries will be created in: cyc.dir/ubin
+
+See also: cyc.dir/README.utils
+
+
+NCAR Graphics
+-------------
+
+The optional graphics functionality requires NCAR Graphics. If you have
+ncargversion (try: which ncargversion) then you have it. If not, then you
+can install the binaries i.e. precompiled programs and libraries, from:
+
+http://ngwww.ucar.edu/ng4.4/download.html
+
+Download and install the appropriate binaries e.g. Red Hat Linux, and follow
+the instructions. I installed version 4.4.0 but I think 4.3.x-4.4.x will be
+okay.
+You have to set the environment variable NCARG_ROOT to the location of the
+ncarg folder
+
+e.g. setenv NCARG_ROOT  /work/user/ncarg/
+
+This is mentioned in the NCAR Graphics installation notes.
+
+If you plan to use the sotware under Windows, on the NCAR Graphics distribution page
+you will see a Cygwin version indicated. If you don't have Cygwin installed then you
+can follow the joint Cygwin - NCAR Graphics for Windows instructions at:
+
+http://ngwww.ucar.edu/ng/cygwin.html
+
+
+NCAR Graphics utilities
+-----------------------
+
+If you have a Linux OS then you *may* be able to use the precompiled binaries.
+
+Download:
+
+http://www.earthsci.unimelb.edu.au/~kevin/cyc_L1.1/zbin_ncarg.linux.zip
+
+to: /work/user. Then:
+
+cd /work/user
+unzip zbin_ncarg.linux.zip
+
+The binaries will be placed in: cyc.dir/ubin
+
+If the binaries don't work then you will need to compile the programs.
+
+Download:
+
+http://www.earthsci.unimelb.edu.au/~kevin/cyc_L1.1/zutils_ncarg.linux.zip
+
+to:  /work/user
+Then:
+
+cd /work/user
+unzip zutils_ncarg.linux.zip
+
+conmap
+------
+
+Go to: cyc.dir/ncarg.dir/src
+
+cd conmap
+run-make
+
+kmapline
+--------
+
+Go to: cyc.dir/ncarg.dir/src
+
+cd kmapline
+run-make
+
+The binaries conmap and kmapline should now be located in: cyc.dir/ubin
+
+There are some graphics tests in: cyc.dir/ncarg.dir/test
+
+
+Cyclone tracking package tests
+------------------------------
+
+The general test folder is:  cyc.dir/test.dir
+i.e. /work/user/cyc.dir/test.dir
+
