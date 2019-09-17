@@ -6,9 +6,10 @@
 # (4) 8/9/2006: Now nisglt=200,njsglt=1021 
 
 #FC = g77
-FC = f77
-
-FFLAGS = -c 
+FC = gfortran
+FFLAGSOPT = -O3
+FFLAGSDEBUG = -g -fbacktrace -fbounds-check
+FFLAGS = $(FFLAGSDEBUG) -c
 
 SRCS.TSTATA_5 = tstat_5.F tstatwrite_5.F 
 
@@ -29,6 +30,9 @@ cpinclude5:
 
 depend.tstat5:
 	makedepend  ${SRCS.TSTATA_5} -f Makefile
+
+clean:
+	-rm *.o $(objects)
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
