@@ -1,4 +1,4 @@
-#
+#!/bin/csh
 
 # Compilation of utilities
 #
@@ -6,13 +6,19 @@
 #
 # Revised: 26/8/2009
 
+# Revised: 17/9/2019
+
 # Destination of executables
+
+cd ..
+if !(-e ubin) mkdir ubin
+cd utils.dir
 
 setenv UBIN ../ubin
 
 # Fortran compiler
 
-set FC = g77
+set FC = gfortran
 
 # C compiler
 
@@ -35,17 +41,20 @@ trk2map )
 
 foreach f ($ff)
   echo "Compiling" $f "..."
-  $FC -o $UBIN/$f $f.f
+  $FC -o $UBIN/$f $f.f -std=legacy
   ls -l $UBIN/$f
 end
 
 # Compilation of read_nc2cmp
 # Requires NetCDF and UDUNITS to be installed;
-# requires netcdf.inc, udunits.inc
+# compatible UDUNITS (v 1.12) binary is stored locally as current versions (2) don't support fortran
+# requires netcdf.inc, udunits.inc (included udunits.inc file modified to be compatible with gfortran)
 
 set f = read_nc2cmp
+
 echo "Compiling" $f "..."
-$FC -o $UBIN/$f $f.f -lnetcdf -ludunits
+$FC -o $UBIN/$f $f.f -lnetcdff libudunits.a -fno-align-commons -fcheck=all #\
+# -fbacktrace -g -O0 # debugging flags
 ls -l $UBIN/$f
 
 # Compilation owf wgrib
