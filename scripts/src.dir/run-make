@@ -3,19 +3,30 @@ pwd
 cd ..
 if !(-e cycbin) mkdir cycbin
 cd src.dir
-echo "Binaries will go in ../../cycbin"
+echo "Binaries will go in ../cycbin"
 cd cycloc_hr.dir
 unzip zsrc*
+echo "Building cycloc"
 make cycloc
+echo "Building psfm"
+make psfm
+make clean
 cd ..
 cd track_hr.dir
 unzip zsrc*
+echo "Building track"
 make track
+echo "Building trackmn"
 make trackmn
+echo "Building trackfm"
+make trackfm
+make clean
 cd ..
 cd tstat_hr.dir
 unzip zsrc*
+echo "Building tstat"
 make tstat
+make clean
 echo "Binaries"
 pwd
 cd ../../cycbin
