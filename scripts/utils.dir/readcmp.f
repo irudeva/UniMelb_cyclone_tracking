@@ -15,39 +15,41 @@ c
 c
       if(iargc().eq.0)then
         write(*,*)'Usage: readcmp [-F fmt][-o outputfile] cmpfile'
-	write(*,*)'Options: '
-	write(*,*)' F: Fortran format for listing e.g. ''(F10.4)'''
-	write(*,*)' o: Output listing file'
-        write(*,*)'Example: readcmp -F ''(F10.4)'' pmsl.cmp'
-        stop
-      else
-        ifmt= 0
-	iout= 0
-	i= 1
-	do while (i.lt.iargc())
-          call getarg (i,optarg)
-	  if(optarg.eq.'-F')then
-	    i= i +1
-	    call getarg (i,optarg) 
-	    read(optarg,'(A)')fmt
-          ofmt= '(''('',I3,'' - '',I3,'') '',10'//fmt(1:ilen(fmt))//')'
-	  ifmt= 1
-	  elseif(optarg.eq.'-o')then
-	    i= i +1
-	    call getarg (i,optarg) 
-	    outfile= optarg
-	    iout= 1
-	  endif
-	  i= i +1
-	enddo
-	call getarg (iargc(),optarg) 
-	infile= optarg
-	inquire(file=infile,exist=lexist)
-	if(.not.lexist)then
-	  write(*,*)'ERROR: Input file ( ',infile(:ilen(infile)),' ) not found'
-	  stop 'ABORT: Due to error'
-	endif
+      write(*,*)'Options: '
+      write(*,*)' F: Fortran format for listing e.g. ''(F10.4)'''
+      write(*,*)' o: Output listing file'
+            write(*,*)'Example: readcmp -F ''(F10.4)'' pmsl.cmp'
+            stop
+          else
+            ifmt= 0
+      iout= 0
+      i= 1
+      do while (i.lt.iargc())
+              call getarg (i,optarg)
+        if(optarg.eq.'-F')then
+          i= i +1
+          call getarg (i,optarg) 
+          read(optarg,'(A)')fmt
+              ofmt= '(''('',I3,'' - '',I3,'') '',10'//
+     +        fmt(1:ilen(fmt))//')'
+        ifmt= 1
+        elseif(optarg.eq.'-o')then
+          i= i +1
+          call getarg (i,optarg) 
+          outfile= optarg
+          iout= 1
+        endif
+        i= i +1
+      enddo
+      call getarg (iargc(),optarg) 
+      infile= optarg
+      inquire(file=infile,exist=lexist)
+      if(.not.lexist)then
+        write(*,*)'ERROR: Input file ( ',infile(:ilen(infile)),' )'//
+     +  ' not found'
+        stop 'ABORT: Due to error'
       endif
+          endif
 c
 c * Read the input 'conmap' file
 c

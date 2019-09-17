@@ -46,26 +46,27 @@ c
       character*80 optarg
 c
       if(iargc().eq.0)then
-	write(*,*)'Usage: splitcon [-b base][-d][-h][-L][-l][-m mapno]',
-     * ' [-n][-H][-M mapno1,mapno2] concat_conmapfile'
-	write(*,*)'Options:'
-	write(*,*)' b: base - basename for output maps i.e. base.0001 etc',
-     * ' (default: split)'
-	write(*,*)' 4: when used with -n use 4 digit time (default: 2 digits)'
-	write(*,*)' d: when used with -m the output file is def.cmp'
-	write(*,*)' h: when used with -m prints conmap to dump.lis'
-	write(*,*)' l: when used with -n the output file is in lowercase',
-     * ' (default: preserve case)' 
-	write(*,*)' m: mapno - map number to output (default: all)'
-	write(*,*)' n: Construct name from header (default: see -b)'
-	write(*,*)' r: Remove lon 360'
-	write(*,*)' w: If lon 0 present, add lon 360'
-	write(*,*)' H: Remove blanks from variable in header',
-     * ' e.g. ''T 1000'' -> T1000'
-	write(*,*)' L: prints list of maps and conmap headers'
-	write(*,*)' M: mapno1,mapno2 - range of map numbers to output',
-     * ' (default: all)'
-	stop
+      write(*,*)'Usage: splitcon [-b base][-d][-h][-L][-l][-m mapno]'
+      write(*,*)' [-n][-H][-M mapno1,mapno2] concat_conmapfile'
+      write(*,*)'Options:'
+      write(*,*)' b: base - basename for output maps i.e. base.0001'//
+     +' etc (default: split)'
+      write(*,*)' 4: when used with -n use 4 digit time (default:'//
+     +'2 digits)'
+      write(*,*)' d: when used with -m the output file is def.cmp'
+      write(*,*)' h: when used with -m prints conmap to dump.lis'
+      write(*,*)' l: when used with -n the output file is in '//
+     +'lowercase (default: preserve case)' 
+      write(*,*)' m: mapno - map number to output (default: all)'
+      write(*,*)' n: Construct name from header (default: see -b)'
+      write(*,*)' r: Remove lon 360'
+      write(*,*)' w: If lon 0 present, add lon 360'
+      write(*,*)' H: Remove blanks from variable in header'//
+     +' e.g. ''T 1000'' -> T1000'
+      write(*,*)' L: prints list of maps and conmap headers'
+      write(*,*)' M: mapno1,mapno2 - range of map numbers to output'//
+     +' (default: all)'
+      stop
       else
 	base= 'split'
 	iall= 1

@@ -59,85 +59,88 @@ c
 c
       narg= iargc()
       if(narg.eq.0)then
-	write(*,*)'Usage: cmp2cdl4 [-h][-Y] -n nmlist -i cmpfile -o cdlfile'
-	write(*,*)' '
-	write(*,*)'Aug 19 2009 '
-	write(*,*)' '
-	write(*,*)'Options:'
-	write(*,*)' h: Help screen'
-	write(*,*)' Y: Interpret year 18 as 1998, 19 as 1999, 20 as 2000'
-	write(*,*)'Example: cmp2cdl4 -n nmlist.txt -i cstatdat.cmp -o test.cdl'
-	write(*,*)'         ncgen -b test.cdl (uses name in cdl file)'
-	write(*,*)'         ncgen -o test.nc test.cdl '
-	write(*,*)' '
-	stop
-      else
-        nmlfile= ''
-	infile= ''
-	iy2k= 0
-        iarg= 0
-        i= 1
-	do while (i.le.narg)
-	  call getarg (i,optarg)
-	  if(optarg.eq.'-1')then
-	    iarg= iarg +1
-            iarg1= 1
-	  elseif(optarg.eq.'-2')then
-	    iarg= iarg +2
-            iarg2= 1
-	    i= i +1
-	    call getarg(i,optarg)
-	  elseif(optarg.eq.'-n')then
-	    iarg= iarg +2
-	    i= i +1
-	    call getarg(i,optarg)
-	    nmlfile= optarg
-	  elseif(optarg.eq.'-i')then
-	    iarg= iarg +2
-	    i= i +1
-	    call getarg(i,optarg)
-	    infile= optarg
-	  elseif(optarg.eq.'-o')then
-	    iarg= iarg +2
-	    i= i +1
-	    call getarg(i,optarg)
-	    outfile= optarg
-	  elseif(optarg.eq.'-Y')then
-	    iarg= iarg +1
-	    iy2k= 1
-	  elseif(optarg.eq.'-h')then
-	    iarg= iarg +1
+      write(*,*)'Usage: cmp2cdl4 [-h][-Y] -n nmlist -i cmpfile -o'//
+     +' cdlfile'
       write(*,*)' '
-      write(*,*)'Namelist: '
-      write(*,*)' namelist /nmcdl/ var,'
-      write(*,*)'* attr_var_long_name, attr_var_units,'
-      write(*,*)'* gattr_desc, gattr_hist,'
-      write(*,*)'* date_time_fmt, date_time_type,'
-      write(*,*)'* nc_name, time_unlimited,'
-      write(*,*)'* map1, map2'
+      write(*,*)'Aug 19 2009 '
       write(*,*)' '
-      write(*,*)'Example namelist:'
-      write(*,*)' &nmcdl'
-      write(*,*)'   var= ''H'','
-      write(*,*)'   date_time_type= ''YM'','
-      write(*,*)'   date_time_fmt= ''(18x,I4,I2)'','
-      write(*,*)'   attr_var_long_name= ''H'','
-      write(*,*)'   attr_var_units= ''per Kelvin'','
-      write(*,*)'   gattr_desc= ''Monthly H (year-month) based'
-      write(*,*)' on monthly HadISST T and NCEP'
-      write(*,*)' Reanalysis E; Period Jan 1979 - Dec 2005'','
-      write(*,*)'   nc_name= ''my_H'','
-      write(*,*)'   map1= 5,'
-      write(*,*)'   map2= 10,'
-      write(*,*)'   time_unlimited=F,'
-      write(*,*)'   gattr_hist= ''Created by Kevin Keay'','
-      write(*,*)' &end'
+      write(*,*)'Options:'
+      write(*,*)' h: Help screen'
+      write(*,*)' Y: Interpret year 18 as 1998, 19 as 1999, 20 as'//
+     +' 2000'
+      write(*,*)'Example: cmp2cdl4 -n nmlist.txt -i cstatdat.cmp -o'//
+     +' test.cdl'
+      write(*,*)'         ncgen -b test.cdl (uses name in cdl file)'
+      write(*,*)'         ncgen -o test.nc test.cdl '
       write(*,*)' '
-            stop
-	  endif
-	  i= i +1
-	enddo
-      endif
+      stop
+          else
+            nmlfile= ''
+      infile= ''
+      iy2k= 0
+            iarg= 0
+            i= 1
+      do while (i.le.narg)
+        call getarg (i,optarg)
+        if(optarg.eq.'-1')then
+          iarg= iarg +1
+                iarg1= 1
+        elseif(optarg.eq.'-2')then
+          iarg= iarg +2
+                iarg2= 1
+          i= i +1
+          call getarg(i,optarg)
+        elseif(optarg.eq.'-n')then
+          iarg= iarg +2
+          i= i +1
+          call getarg(i,optarg)
+          nmlfile= optarg
+        elseif(optarg.eq.'-i')then
+          iarg= iarg +2
+          i= i +1
+          call getarg(i,optarg)
+          infile= optarg
+        elseif(optarg.eq.'-o')then
+          iarg= iarg +2
+          i= i +1
+          call getarg(i,optarg)
+          outfile= optarg
+        elseif(optarg.eq.'-Y')then
+          iarg= iarg +1
+          iy2k= 1
+        elseif(optarg.eq.'-h')then
+          iarg= iarg +1
+          write(*,*)' '
+          write(*,*)'Namelist: '
+          write(*,*)' namelist /nmcdl/ var,'
+          write(*,*)'* attr_var_long_name, attr_var_units,'
+          write(*,*)'* gattr_desc, gattr_hist,'
+          write(*,*)'* date_time_fmt, date_time_type,'
+          write(*,*)'* nc_name, time_unlimited,'
+          write(*,*)'* map1, map2'
+          write(*,*)' '
+          write(*,*)'Example namelist:'
+          write(*,*)' &nmcdl'
+          write(*,*)'   var= ''H'','
+          write(*,*)'   date_time_type= ''YM'','
+          write(*,*)'   date_time_fmt= ''(18x,I4,I2)'','
+          write(*,*)'   attr_var_long_name= ''H'','
+          write(*,*)'   attr_var_units= ''per Kelvin'','
+          write(*,*)'   gattr_desc= ''Monthly H (year-month) based'
+          write(*,*)' on monthly HadISST T and NCEP'
+          write(*,*)' Reanalysis E; Period Jan 1979 - Dec 2005'','
+          write(*,*)'   nc_name= ''my_H'','
+          write(*,*)'   map1= 5,'
+          write(*,*)'   map2= 10,'
+          write(*,*)'   time_unlimited=F,'
+          write(*,*)'   gattr_hist= ''Created by Kevin Keay'','
+          write(*,*)' &end'
+          write(*,*)' '
+                stop
+        endif
+        i= i +1
+      enddo
+          endif
 c
 c * Parameter checks
 c

@@ -127,7 +127,8 @@ c
         write(*,*)'     the first line (default: no label line)'
         write(*,*)'  N: tracknfile: A list of track numbers'
         write(*,*)'  R: The mapline and CSV files contain track points'
-	write(*,*)'     which lie within the region given by the -r option'
+	write(*,*)'     which lie within the region given by the'//
+     +' -r option'
         write(*,*)'  S: SUN f77 trkfile (default: g77 trkfile)'
         write(*,*)'  T: For CSV file include a track header line for'
         write(*,*)'     each track (default: no headers)'
