@@ -1,8 +1,8 @@
 #
 # (1) 8/9/2006 : allows for 200 centres per track (max seenm so far is 142)
 
-FC = g77
-FFLAGS = -c  -ffortran-bounds-check -finit-local-zero
+FC = gfortran
+FFLAGS = -c  -fbounds-check -finit-local-zero
 
 SRCS.TRAKA  = track.F cycio_1.F trackio.F update.F splithist.F lasthist.F match.F predict.F prob.F tracksum.F predvl.F 
 SRCS.TRAKB = timedif.f srchls.f ngtopt.f globtest.f bisplcf.f isplcf.f llexpand.f psconv.f getwds.f qmapread.f
@@ -33,7 +33,10 @@ depend.trfm:
 depend.trmn:
 	makedepend  ${SRCS.TRMNA} -f Makefile
 
+clean:
+	-rm *.o $(objects)
+
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-trackmn.o: cyc1.h trk1.h trk2.h trk3.h
+trackfm.o: cyc1.h trk1.h trk2.h trk3.h
 trackio.o: cyc1.h trk1.h trk2.h
