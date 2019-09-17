@@ -179,7 +179,7 @@ c
       character*10 gtype  ! e.g. '2.5x2.5DEG'
       character cvtype*8,vtype0*8
       character*20 dvar(3)
-      character*20 fmt
+      character*35 fmt
       integer int_att
       real real_att
       real*8 dble_att
@@ -1315,7 +1315,7 @@ C     UDUNITS STUFF TO UNPACK TIME:
 ********************************************************************
 C     declare udunits function calls
 
-      integer UTMAKE,UTDEC,uttime
+C      integer UTMAKE,UTDEC,uttime
 
 C     declare everything else
 
@@ -1327,8 +1327,10 @@ c * Note: mlon=721,nlat=361 corresponds to a global 0.5 x 0.5 grid
       real*8 ddata(mlon,mlat)
       common /blk1/x,idata,ddata
 c
-      integer*4 iyear,imonth,iday,ihour,retcode,itimeid
-      integer*4 unitptr
+      integer*4 iyear,imonth,iday,ihour,itimeid
+      integer*8 retcode_utdec
+      integer retcode_uttime
+      integer*8 unitptr
       character*1024 unitstrin
       character*1024 unitstr
 c
@@ -1382,8 +1384,8 @@ ckk      itimeid=NCVID(inet,'time',icode)
 ckk      unitstr= 'hours since 1900-01-01 00:00:0.0'
       if(idbg.eq.2.and.idbg2.eq.1)
      *   write(*,*)'unitstr:',unitstr(1:nblen(unitstr))
-      retcode=utdec(unitstr,unitptr)
-      retcode=uttime(unitptr)
+      retcode_utdec=utdec(unitstr,unitptr)
+      retcode_uttime=uttime(unitptr)
       isave=1
       elseif(idt.eq.1)then ! ttype = 'CDO'
       itimeid=NCVID(inet,time_var,icode)
@@ -1720,7 +1722,7 @@ ckk      include '/usr/local/include/udunits.inc'
       integer timedid			! Time dimension id
       character*100 timeunit 		! unit attribute for time variable
       integer*4 unitptr			! pointer to udunits unit
-      integer*4 UTMAKE			! Declare the function.  It's in the
+C      integer*4 UTMAKE			! Declare the function.  It's in the
 					! uduints.inc at our site, but may 
                                         ! not be at others.
       integer yr1,mn1,dy1,hr1		! First time value in file
@@ -1736,8 +1738,8 @@ ckk      include '/usr/local/include/udunits.inc'
       integer equalinc			! Identify non-equal time increments
       
       integer ercode			! To get netCDF error codes
-	  integer UTDEC				! Declare the functions.
-	  integer UTICALTIME
+C	  integer UTDEC				! Declare the functions.
+C	  integer UTICALTIME
       integer istart(1),icount(1)	! Used in netCDF calls
       character*15 cname		! Place holder
 
@@ -2147,9 +2149,9 @@ ckk      include '/usr/local/include/udunits.inc'
 
 C     Note: POINTER type is integer*4 on the CDC SparcCenter 2000
 C     system running SunOS 5.3
-      integer UTMAKE,UTDEC,utcaltime
+C      integer UTMAKE,UTDEC,utcaltime
 
-      integer*4 unitptr ! Pointer to udunits "unit" type
+      integer*8 unitptr ! Pointer to udunits "unit" type
 
       character*100 timeunit
 			! The unit attribute for time in the netCDF file
