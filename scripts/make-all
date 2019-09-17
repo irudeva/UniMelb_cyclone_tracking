@@ -1,0 +1,16 @@
+
+echo "Building core applications:"
+
+cd src.dir
+
+./run-make
+
+cd ..
+
+echo "Building utilities:"
+
+cd utils.dir
+
+./run-compile
+
+cd ..
