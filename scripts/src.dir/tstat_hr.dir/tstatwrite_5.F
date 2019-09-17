@@ -103,8 +103,8 @@ c-----------------------------------------------------------------------
      *        y.gt.float(nj) .or. y.lt.float(1)) go to 40
 
 crmw      min0 -> min
-          ilo = min(ni-1,x)
-          jlo = min(nj-1,y)
+          ilo = min(real(ni-1),x)
+          jlo = min(real(nj-1),y)
           ihi = ilo + 1
           jhi = jlo + 1
           A2 = x - float(ilo)
