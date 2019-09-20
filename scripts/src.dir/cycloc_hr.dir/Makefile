@@ -7,8 +7,8 @@
 # a glitch with g77
 
 FC = gfortran
-FFLAGSOPT = -O3
-FFLAGSDEBUG = -g -fbacktrace -fbounds-check
+FFLAGSOPT = #-O3
+FFLAGSDEBUG = #-g -fbacktrace -fbounds-check
 FFLAGS = $(FFLAGSDEBUG)
 
 

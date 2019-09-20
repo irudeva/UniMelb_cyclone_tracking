@@ -1150,10 +1150,10 @@ c         ----------------------------------------
             write (iosz) nlats
             write (iosz) (lats(k),k=1,nlats)
             write (iosz) nlons
-            write (iosz) (lons(h),h=1,nlons)
+            write (iosz) (lons(n),n=1,nlons)
             llhead(31:42) = sourcey
             write (iosz) llhead
-            write (iosz) (fhk(hk),hk=1,nlons*nlats)
+            write (iosz) (fhk(nk),nk=1,nlons*nlats)
             close (iosz)
             write (6,'(a,t60,2f10.2)') 
      *       ' Reinterpolated smoothed topography written.'
@@ -1632,13 +1632,13 @@ c           -----------------------------------------------
               write (iosl) (lats(k),k=1,nlats)
               write (iosl) nlons
 	      if(offlon.gt.0.)then  !KK Temporary fix 29/5/2007
-                write (iosl) (lons(h)-offlon,h=1,nlons)
+                write (iosl) (lons(n)-offlon,n=1,nlons)
 	      else
-                write (iosl) (lons(h),h=1,nlons)
+                write (iosl) (lons(n),n=1,nlons)
 	      endif
               llhead(31:42) = sourcey
               write (iosl) llhead
-              write (iosl) (fhk(hk),hk=1,nlons*nlats)
+              write (iosl) (fhk(nk),nk=1,nlons*nlats)
               if (diag) write (6,160) 
      *         ' Reinterpolated smoothed data written.'
      *,        ddtime()

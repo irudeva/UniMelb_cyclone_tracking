@@ -133,11 +133,11 @@ c    *   '_recast',form='unformatted',status='unknown')
         write (iurcst) nk2
         write (iurcst) (lat2(k),k=1,nk2)
         write (iurcst) nh2
-        write (iurcst) (lon2(h),h=1,nh2)
+        write (iurcst) (lon2(n),n=1,nh2)
         headrcst = head
         headrcst(49:56) = 'EXPANDED'
         write (iurcst) head
-        write (iurcst) (f(hk),hk=1,nhk2)
+        write (iurcst) (f(nk),nk=1,nhk2)
         close (iurcst)
       endif
 
@@ -281,11 +281,11 @@ c       Calculate values at Poles.
             if (ipoleSN.ge.2) then
               do 160 kkk = 1,nkksp
                 kksp(kkk) = kk0 - kksign*(nkksp+1-kkk)
-                ll(kkk) = float(kksign)*(lat2(kksp(kkk)) - polelat)
+                ll(kkk) = float(kksign)*(lat2(int(kksp(kkk))) - polelat)
   160         continue
               do 170 kkk = nkksp1,nspline
                 kksp(kkk) = kk0 - kksign*(nkksp-kkk)
-                ll(kkk) = float(kksign)*(lat2(kksp(kkk)) - polelat)
+                ll(kkk) = float(kksign)*(lat2(int(kksp(kkk))) - polelat)
   170         continue
               if (idiag.ge.3) then
                 write (6,*) ' '
@@ -298,7 +298,7 @@ c       Calculate values at Poles.
               do 180 ihh = 1,nhhsp
                 hh = hhL + ((ihh-1)*nhx)/nhhsp
                 do 175 kkk = 1,nspline
-                  ff(kkk) = f(hh,kksp(kkk))
+                  ff(kkk) = f(hh,int(kksp(kkk)))
   175           continue
                 call isplcf(ll,ff,cc,gam,nspline,1,nspline,0.,0.)
                 A1 = 0.5
