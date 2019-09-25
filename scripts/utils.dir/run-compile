@@ -53,7 +53,7 @@ end
 set f = read_nc2cmp
 
 echo "Compiling" $f "..."
-$FC -o $UBIN/$f $f.f -lnetcdff libudunits.a -fno-align-commons -fcheck=all #\
+$FC -o $UBIN/$f $f.f -lnetcdff libudunits.a #-fcheck=all #\
 # -fbacktrace -g -O0 # debugging flags
 ls -l $UBIN/$f
 

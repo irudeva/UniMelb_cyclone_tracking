@@ -259,7 +259,7 @@ c
 	lvar= 'levelist'
 	iscal= 0
 	uscal= 1.0
-        udpath= '/usr/local/etc/udunits.dat'
+        udpath= 'udunits.dat'
         nmaps= 0
 	imapset= 0
 	ttype= ''
@@ -1403,10 +1403,10 @@ c * Next line is unchanged from example program (KK)
       call NCPOPT(0)	!Turn off netCDF error reaction
 c
 c---
-ckk      call ncagt(inet,ivar,'scale_factor',dxscale,icode1)
-ckk      xscale= real(dxscale)
-ckk      call ncagt(inet,ivar,'add_offset',dxoff,icode2)
-ckk      xoff= real(dxoff)
+c      call ncagt(inet,ivar,'scale_factor',dxscale,icode1)
+c      xscale= real(dxscale)
+c      call ncagt(inet,ivar,'add_offset',dxoff,icode2)
+c      xoff= real(dxoff)
 c---
 
 c
@@ -1425,15 +1425,15 @@ c
      * rcode)
           if(attype(i,j).ne.2) then  ! Not a character attribute
             if(attype(i,j).eq.4)then
-              call ncagt(inet,i,attnam(i,j),int_att,rcode)
+              call ncagt(inet,i,attnam(i,j),int_att,icode1)
               xscale= real(int_att)
             endif
             if(attype(i,j).eq.5)then
-              call ncagt(inet,i,attnam(i,j),real_att,rcode)
+              call ncagt(inet,i,attnam(i,j),real_att,icode1)
               xscale= real_att
             endif
             if(attype(i,j).eq.6)then
-              call ncagt(inet,i,attnam(i,j),dble_att,rcode)
+              call ncagt(inet,i,attnam(i,j),dble_att,icode1)
               xscale= real(dble_att)
             endif
           endif
@@ -1449,15 +1449,15 @@ c
      * rcode)
           if(attype(i,j).ne.2) then  ! Not a character attribute
             if(attype(i,j).eq.4)then
-              call ncagt(inet,i,attnam(i,j),int_att,rcode)
+              call ncagt(inet,i,attnam(i,j),int_att,icode2)
               xoff= real(int_att)
             endif
             if(attype(i,j).eq.5)then
-              call ncagt(inet,i,attnam(i,j),real_att,rcode)
+              call ncagt(inet,i,attnam(i,j),real_att,icode2)
               xoff= real_att
             endif
             if(attype(i,j).eq.6)then
-              call ncagt(inet,i,attnam(i,j),dble_att,rcode)
+              call ncagt(inet,i,attnam(i,j),dble_att,icode2)
               xoff= real(dble_att)
             endif
           endif
@@ -1471,13 +1471,13 @@ c
             print *, 'Error calling nf_inq_vartype.'
             stop
          endif
-	 if(vartype.eq.3)then  ! integer*2
-           call ncagt(inet,ivar,'missing_value',miss,icode3)
-	 elseif(vartype.eq.5)then  ! real
-           call ncagt(inet,ivar,'missing_value',rmiss,icode3)
-	 elseif(vartype.eq.6)then  ! real*8 
-           call ncagt(inet,ivar,'missing_value',dmiss,icode3)
-         endif
+      if(vartype.eq.3)then  ! integer*2
+              call ncagt(inet,ivar,'missing_value',miss,icode3)
+      elseif(vartype.eq.5)then  ! real
+              call ncagt(inet,ivar,'missing_value',rmiss,icode3)
+      elseif(vartype.eq.6)then  ! real*8 
+              call ncagt(inet,ivar,'missing_value',dmiss,icode3)
+      endif
 c
       if(idbg.eq.2.and.idbg2.eq.1)then
         write(*,*)'scale_factor: ',xscale
@@ -1489,28 +1489,28 @@ C     SLAB INFO FOR DATA ARRAY
 
 C     see if packed or not!!!!
       ipack=0
-      if((icode1.eq.0).and.(icode2.eq.0))then
+      if((icode1 .eq. 0) .and. (icode2 .eq. 0)) then
         isdfltao = 0
-	isdfltsf = 0
-	if (abs(xscale - 1.0) .lt. 1.0e-10) then
-	    isdfltsf = 1
+        isdfltsf = 0
+        if (abs(xscale - 1.0) .lt. 1.0e-10) then
+            isdfltsf = 1
         endif
-	if (abs(xoff) .lt. 1.0e-10) then
-	    isdfltao = 1
+        if (abs(xoff) .lt. 1.0e-10) then
+            isdfltao = 1
         endif
-	if ((isdfltsf .eq. 1).and.(isdfltao .eq. 1)) then
+        if ((isdfltsf .eq. 1).and.(isdfltao .eq. 1)) then
 C        if((xscale.eq.1).and.(xoff.eq.0))then
-         call ncvinq(inet, ivar, varname, vartype, ndims, dims, natts,
+          call ncvinq(inet, ivar, varname, vartype, ndims, dims, natts,
      +               rtncode)
-         if (rtncode .ne. ncnoerr) then
-            print *, 'Error calling nf_inq_vartype.'
-            stop
-         endif
-         if (vartype .eq. ncshort) then
-            ipack = 1
-         else
-            ipack = 0
-         endif
+          if (rtncode .ne. ncnoerr) then
+              print *, 'Error calling nf_inq_vartype.'
+              stop
+          endif
+          if (vartype .eq. ncshort) then
+              ipack = 1
+          else
+              ipack = 0
+          endif
         else
          ipack=1
         endif
@@ -1721,7 +1721,7 @@ ckk      include '/usr/local/include/udunits.inc'
       integer timevid			! Time variable id
       integer timedid			! Time dimension id
       character*100 timeunit 		! unit attribute for time variable
-      integer*4 unitptr			! pointer to udunits unit
+      integer*8 unitptr			! pointer to udunits unit
 C      integer*4 UTMAKE			! Declare the function.  It's in the
 					! uduints.inc at our site, but may 
                                         ! not be at others.
