@@ -37,7 +37,7 @@ c-------------------------------------------------------------------------------
       parameter (rad=57.295779)
       parameter (r6=1./6.)
 
-      character (len=*) projn
+      character projn*1
       integer hlo,hhi,hdif,hav
       real lon(nh),lat(nk)
       real latij,latlo,lathi,lonij,lonlo,lonhi
