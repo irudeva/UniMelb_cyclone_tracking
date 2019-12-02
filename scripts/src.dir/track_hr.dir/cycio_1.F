@@ -235,8 +235,8 @@ c     -------------------
       if (ahr(3:3).eq.' ') ahr(3:3) = '0'
       write (chead1,240) ada,ahr,nnmlc,nnmlc+4,itabc1,itabc2,itabc3,
      * itabc4,itabc5,nk,hdtail(1:lnblnk(hdtail))
-  240 format (' CENTRES:  ',a6,1x,a4,' (NNML=',i2,',',i2,';ITABC=',
-     * 2i1,i2,i1,i2,'), ',i3,1x,a)
+  240 format (11x,a6,1x,a4,7x,i2,1x,i2,7x,
+     * 2i1,i2,i1,i2,3x,i3,1x,a)
       
       chead = chead1(1:80)
 
