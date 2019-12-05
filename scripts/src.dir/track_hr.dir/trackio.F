@@ -36,6 +36,25 @@ c     ------------------
       integer trk,statf,statl
       dimension vart(nitlt,nvarlt)
 
+c     Edit: Ahmad Galea, 2019
+
+c     gfortran does not implicitly do conversions 
+c     to output format, so they must be explicit
+
+c     Values to point to explicitly converted
+c     int data retrieved from 'vart'
+c     -------------------------- 
+      integer dai,hri,stat1i,stat2i,ki,iopi
+      real dar,hrr,stat1r,stat2r,kr,iopr
+  
+      equivalence (dai,dar)
+      equivalence (hri,hrr)
+      equivalence (stat1i,stat1r)
+      equivalence (stat2i,stat2r)
+      equivalence (ki,kr)
+      equivalence (iopi,iopr)
+
+
 c     Namelist for formatted i/o
 c     --------------------------
 
@@ -269,7 +288,27 @@ c-----------------------------------------------------------------------
 
       if (trfmz) then
         write (iunit,'(/a)') trtab(1:lntrtab)
-        write (iunit,fmt) ((vart(m,isw(ivar)),ivar=1,nvar),m=1,nit)
+
+c       Loop over track data and write to file
+        do m=1, nit
+
+c         Do retrieve values from vart in real format
+          dar = vart(m,2)
+          hrr = vart(m,3)
+          stat1r = vart(m,4)
+          stat2r = vart(m,5)
+          kr = vart(m,6)
+          iopr = vart(m,7)
+
+c         Write data to file
+          write (iunit,fmt) vart(m,1),
+c         seperate out int vars (using int conversions)
+     *    dai,hri,stat1i, stat2i,ki,iopi,
+c         rest of data
+     *    ((vart(m,isw(ivar))),ivar=8,nvar)
+
+        end do
+
         write (iunit,'()')
       else
         write (iunit) ((vart(m,isw(ivar)),ivar=1,nvar),m=1,nit)
