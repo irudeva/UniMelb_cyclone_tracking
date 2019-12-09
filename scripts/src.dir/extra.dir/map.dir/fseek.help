@@ -1,0 +1,25 @@
+Try: info -f g77 and search for fseek
+
+FSeek Intrinsic
+...............
+
+     CALL FSeek(UNIT, OFFSET, WHENCE, ERRLAB)
+
+UNIT: `INTEGER'; scalar; INTENT(IN).
+
+OFFSET: `INTEGER'; scalar; INTENT(IN).
+
+WHENCE: `INTEGER'; scalar; INTENT(IN).
+
+ERRLAB: `*LABEL', where LABEL is the label of an executable statement;
+OPTIONAL.
+
+Intrinsic groups: `unix'.
+
+Description:
+
+   Attempts to move Fortran unit UNIT to the specified OFFSET: absolute
+offset if WHENCE=0; relative to the current offset if WHENCE=1;
+relative to the end of the file if WHENCE=2.  It branches to label
+ERRLAB if UNIT is not open or if the call otherwise fails.
+

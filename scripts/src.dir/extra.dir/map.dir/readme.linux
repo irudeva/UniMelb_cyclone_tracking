@@ -1,0 +1,19 @@
+The important points to note are:
+
+(1) g77 -fugly-logint
+    This allows the Sun convention of integer == logical.
+    Avoids the need to rewrite a lot of code with mixed
+    integer and logical variables as well as the use of
+    "+" in logical operations. Best not to use this
+    approach in Linux :).
+(2) The Sun Fortran function fseek is a subroutine in g77.
+    The g77 documentation is in: fseek.help.
+    Note that the ERRLAB argument doesn't appear to be
+    implemented.
+(3) Some minor tweaks were made e.g X -> 1X and some
+    variable declarations/initialisations were made.
+
+It is possible there are bugs due to the Sun -> Linux
+conversion but the common options (-f, -O) seem okay.
+
+Kevin Keay 11/10/2003

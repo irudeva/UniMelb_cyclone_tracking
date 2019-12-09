@@ -1,0 +1,11 @@
+Compilation of binswap
+======================
+
+On our Sun system it was necessary to comment out:
+
+#include <getopt.h>
+
+since it caused a compilation error. 
+Retain this statement for gcc under Linux and Cygwin
+
+Kevin Keay    October 13 2004
