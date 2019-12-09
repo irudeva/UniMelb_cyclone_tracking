@@ -15,6 +15,12 @@
 c     Last revised 18th Oct., 2005.
 
 c-------------------------------------------------------------------------------
+c     Modified 09/12/2019, Ahmad Galea (Science IT University of Melbourne)
+c     
+c     Date format changed from yymmdd to yyyymmdd.
+c-------------------------------------------------------------------------------
+
+c-------------------------------------------------------------------------------
 c     Read data file
 c-------------------------------------------------------------------------------
 
@@ -133,8 +139,8 @@ c-------------------------------------------------------------------------------
       unit = ' '
       if ((head(19:24).eq.'shanal').or.(head(19:24).eq.'SHANAL')) then
         source = 'SHANAL'
-        read (head(40:45),'(i6)') da
-        read (head(47:50),'(i6)') hr
+        read (head(40:48),'(i8)') da
+        read (head(50:55),'(i6)') hr
         dmode = 'YMDHM'
         grid  = ' '
         quant = head(1:6)
@@ -164,8 +170,8 @@ c-------------------------------------------------------------------------------
           dmode(1:3) = 'DDD'
           if (head(27:29).eq.'***') then
             dmode = 'YMDHM'
-            read (head(49:54),'(i6)') da
-            read (head(56:59),'(i4)') hr
+            read (head(49:57),'(i8)') da
+            read (head(53:62),'(i4)') hr
           else
             if (head(30:30).eq.':') then
               read (head(27:32),'(i3,x,i2)') da,ihour
@@ -177,7 +183,7 @@ c-------------------------------------------------------------------------------
               dmode(4:5) = 'HM'
             endif
             if (da.lt.1000) then
-              read (head(39:40),'(i2)') iyear
+              read (head(39:42),'(i4)') iyear
               if (iyear.ge.1) then
                 da = da + iyear*10000
                 dmode(1:3) = 'YDD'
@@ -190,14 +196,17 @@ c-------------------------------------------------------------------------------
             read (head(31:38),'(i3,x,i4)') da,hr
             dmode(4:5) = 'DD'
           else
-            read (head(31:36),'(i6)') da
+            read (head(31:39),'(i8)') da
             hr = 0
             dmode(4:5) = 'HM'
           endif
         endif
       else
 c       read (head,'(a8,a9,x,a10,11x,a6,x,a4,x,a12,a17)',err=100)
-        read (head,'(a8,x,a9,12x,a10,2x,i6,x,i4,4x,a12,x,a10)',err=100)
+c       YYMMDD Date format
+c       read (head,'(a8,x,a9,12x,a10,x,i6,x,i4,4x,a12,x,a10)',err=100)
+c       YYYYMMDD Date format
+        read (head,'(a8,x,a9,12x,a10,i8,x,i4,4x,a12,x,a10)',err=100)
      *    quant,level,source,da,hr,unit,grid
         if (lnblnk(level).ne.0 .and. lnblnk(lunit).eq.0) lunit = 'M'
       endif
