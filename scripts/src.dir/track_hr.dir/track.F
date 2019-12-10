@@ -675,7 +675,7 @@ c       --------------------
         call update(nwhist)
         if (ierr.eq.1) go to 670
 
-        if (idiagt.eq.0) write (6,'(i3,'': '',i6,x,i4,'', TRK '',
+        if (idiagt.eq.0) write (6,'(i3,'': '',i8,x,i4,'', TRK '',
      *   i5)') ic,dac,hrc,lstrk2
 
 c       Reallocate variables and commute history file indices

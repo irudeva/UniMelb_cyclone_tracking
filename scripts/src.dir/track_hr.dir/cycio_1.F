@@ -16,6 +16,15 @@ c    *   upc,vpc,sc,nsuplt,ierr)
 
 c     Last revised 11 Jan., 1996, R.J. Murray.
 
+
+c-------------------------------------------------------------------------------
+c     Modified 09/12/2019, Ahmad Galea (Science IT University of Melbourne)
+c     
+c     Date format changed from yymmdd to yyyymmdd.
+c-------------------------------------------------------------------------------
+
+
+
 c==============================================================================
 
       Subroutine cychdwr(iaux)
@@ -209,7 +218,7 @@ c------------------------------------------------------------------------------
       character*60 hdtail
       character*100 chead1,lnmlc(50)
       character*160 tabc
-      character ada*6,ahr*4
+      character ada*8,ahr*4
       common /bltabc1/nnmlc
       common /bltabc2/hdtail,tabc,lnmlc
 
@@ -227,7 +236,7 @@ c-----------------------------------------------------------------------
 c     Compose header line
 c     -------------------
 
-      write (ada,'(i6)') da
+      write (ada,'(i8)') da
       if (ada(1:1).eq.' '.and.ada(2:2).ne.' ') ada(1:1) = '0'
       write (ahr,'(i4)') hr
       if (ahr(1:1).eq.' ') ahr(1:1) = '0'
@@ -235,7 +244,7 @@ c     -------------------
       if (ahr(3:3).eq.' ') ahr(3:3) = '0'
       write (chead1,240) ada,ahr,nnmlc,nnmlc+4,itabc1,itabc2,itabc3,
      * itabc4,itabc5,nk,hdtail(1:lnblnk(hdtail))
-  240 format (11x,a6,1x,a4,7x,i2,1x,i2,7x,
+  240 format (11x,a8,1x,a4,7x,i2,1x,i2,7x,
      * 2i1,i2,i1,i2,3x,i3,1x,a)
       
       chead = chead1(1:80)
@@ -324,7 +333,7 @@ c     Read header and namelist information
 
       read (chead,240,err=440,end=430) ada,ahr,nnmlc,nnmlcp4,
      * itabc1,itabc2,itabc3,itabc4,itabc5,nk
-      read (ada,'(i6)') da
+      read (ada,'(i8)') da
       read (ahr,'(i4)') hr
 
       if (nk.gt.nklt) go to 450

@@ -15,6 +15,17 @@ c     tr3rd      Read  of individual track (point data)
 c     Written by Ross Murray
 c     Last revised 10th Aug., 1995.
 
+
+c-------------------------------------------------------------------------------
+c     Modified 09/12/2019, Ahmad Galea (Science IT University of Melbourne)
+c     
+c     - Made integer conversions for file output explicit.
+c     - Date format changed from yymmdd to yyyymmdd.
+c
+c-------------------------------------------------------------------------------
+
+
+
 c-----------------------------------------------------------------------
 c     Declarations
 c-----------------------------------------------------------------------
@@ -164,7 +175,7 @@ c-----------------------------------------------------------------------
         write (iunit,310) trk,statf,statl,ifst,ilst,nit,
      *   idafst,ihrfst,idalst,ihrlst,itabt3z,itabt4z
   310   format (' Track',i5,': stat = ',i1,i1,', ifst = ',i4,
-     *       ', ilst = ',i4,', nit = ',i3,1x,i6,i4,' - ',i6,i4,
+     *       ', ilst = ',i4,', nit = ',i3,1x,i8,i4,' - ',i8,i4,
      *       '.  (itab=',2i2,')')
       else
         fileid = 'thist2'
@@ -227,8 +238,8 @@ c       do 430 ivar = 7+nvarc+1,nvar
 c         isw(ivar) = ivar
 c 430   continue
       endif
-      write (fmt,'(''(f10.4,2x,i6,1x,i4,3x,i1,i1,2x,i3,2x,i2,2x,'',
-     * ''f5.3,t45,'',i2,''f9.3)'')') nvarc+nvart-1
+      write (fmt,'(''(f10.4,2x,i8,1x,i4,3x,i1,i1,2x,i3,2x,i2,2x,'',
+     * '''',i2,''f9.3)'')') nvarc+nvart
         
       if (itabt4z.eq.0) then
         if (itabt3z.eq.0) then
@@ -265,7 +276,7 @@ c 430   continue
         write (6,*) ' itabt4z = ',itabt4z
         stop ' Tabulation style unknown.'
       endif
-  440 format (2x,a8,2x,a6,1x,a4,1x,a4,2x,a3,1x,a3,2x,a5,t45,20a9)
+  440 format (2x,a8,2x,a8,1x,a4,1x,a4,2x,a3,1x,a3,2x,20a9)
       lntrtab = lnblnk(trtab)
 
       if (idiagt.ge.1) then
@@ -292,7 +303,7 @@ c-----------------------------------------------------------------------
 c       Loop over track data and write to file
         do m=1, nit
 
-c         Do retrieve values from vart in real format
+c         Retrieve values from vart in real format
           dar = vart(m,2)
           hrr = vart(m,3)
           stat1r = vart(m,4)

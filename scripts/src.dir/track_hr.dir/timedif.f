@@ -7,6 +7,13 @@ c     given dates and times.
 c     Last revised 18 Feb 1991,  R.J. Murray.
 
 c-------------------------------------------------------------------------------
+c     Modified 09/12/2019, Ahmad Galea (Science IT University of Melbourne)
+c     
+c     Date format changed from yymmdd to yyyymmdd.
+c-------------------------------------------------------------------------------
+
+
+c-------------------------------------------------------------------------------
 c       (1)  Explanation.
 c-------------------------------------------------------------------------------
 
@@ -25,7 +32,7 @@ c-------------------------------------------------------------------------------
 c       (2)  Declarations.
 c-------------------------------------------------------------------------------
 
-      character dmode*6,dmodex*6,ada1*6,ada2*6,ahr1*4,ahr2*4
+      character dmode*6,dmodex*6,ada1*8,ada2*8,ahr1*4,ahr2*4
       integer da1,hr1,da2,hr2
       integer err,dmin,ddhm
       dimension idaym(12)
@@ -50,12 +57,13 @@ c-------------------------------------------------------------------------------
       if ((dmode(4:4).ne.'H').and.(dmode(4:4).ne.' ')) go to 110
       if ((da1.lt.0).or.(da2.lt.0)) go to 130
 
+c     Ensures dates in 4 format YYYYMMDD
       if (dmode(1:1).eq.'D') then
         if ((da1.gt.999).or.(da2.gt.999)) go to 130
       else if (dmode(1:3).eq.'YDD') then
-        if ((da1.gt.999999).or.(da2.gt.999999)) go to 130
+        if ((da1.gt.99999999).or.(da2.gt.99999999)) go to 130
       else
-        if ((da1.gt.991231).or.(da2.gt.991231)) go to 130
+        if ((da1.gt.99991231).or.(da2.gt.99991231)) go to 130
       endif
 
       if (dmode(4:4).eq.'H') then
@@ -80,21 +88,21 @@ c-------------------------------------------------------------------------------
         iday1 = da1
         iday2 = da2
       else if (dmode(1:3).eq.'YDD') then
-        write (ada1,'(i6)') da1
-        read (ada1(1:2),'(i2)') iyear1
-        read (ada1(3:6),'(i4)') iday1
-        write (ada2,'(i6)') da2
-        read (ada2(1:2),'(i2)') iyear2
-        read (ada2(3:6),'(i4)') iday2
+        write (ada1,'(i8)') da1
+        read (ada1(1:4),'(i4)') iyear1
+        read (ada1(5:8),'(i4)') iday1
+        write (ada2,'(i8)') da2
+        read (ada2(1:4),'(i4)') iyear2
+        read (ada2(5:8),'(i4)') iday2
       else
-        write (ada1,'(i6)') da1
-        read (ada1(1:2),'(i2)') iyear1
-        read (ada1(3:4),'(i2)') imonth1
-        read (ada1(5:6),'(i2)') iday1
-        write (ada2,'(i6)') da2
-        read (ada2(1:2),'(i2)') iyear2
-        read (ada2(3:4),'(i2)') imonth2
-        read (ada2(5:6),'(i2)') iday2
+        write (ada1,'(i8)') da1
+        read (ada1(1:4),'(i4)') iyear1
+        read (ada1(5:6),'(i2)') imonth1
+        read (ada1(7:8),'(i2)') iday1
+        write (ada2,'(i8)') da2
+        read (ada2(1:4),'(i4)') iyear2
+        read (ada2(5:6),'(i2)') imonth2
+        read (ada2(7:8),'(i2)') iday2
 
         mody1 = mod(iyear1,4)
         mody2 = mod(iyear2,4)

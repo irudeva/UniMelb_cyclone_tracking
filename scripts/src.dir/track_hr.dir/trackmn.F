@@ -147,7 +147,7 @@ c-----------------------------------------------------------------------
       if (man) then
         if (diag) write (6,*) ' man = T'
         dastrt = 0
-        dastop = 999999
+        dastop = 99999999
         hrstrt = 0
         hrstop = 0
         ddet   = ltrue
@@ -550,7 +550,7 @@ c       ----------------
           else if (vdet) then
             if (ifst.gt.ifstlast) write (iomn,570) 
      *       ifst,idafst,ihrfst,trk
-  570       format (/i4,':  ',i6,1x,i4,'  Tracks ',i5,' ...',$)
+  570       format (/i4,':  ',i8,1x,i4,'  Tracks ',i5,' ...',$)
             ifstlast = ifst
             itrklast = trk
           endif
