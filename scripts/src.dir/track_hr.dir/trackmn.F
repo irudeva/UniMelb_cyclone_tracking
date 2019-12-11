@@ -22,6 +22,14 @@ c      (2) Made some minor adjustments to formats and intrinsic function calls
 c          - see: diff.lis.
 c
 
+c-------------------------------------------------------------------------
+c 
+c  Modified 11/12/2019, Ahmad Galea (Science IT University of Melbourne)
+c
+c  Added explicit trkdash decleration
+c
+c-------------------------------------------------------------------------
+
 c-----------------------------------------------------------------------
 c     Declarations
 c-----------------------------------------------------------------------
@@ -39,6 +47,7 @@ c     ------------------
       integer optind,statf,statl
       character*80 optarg
       integer trk,trknew
+      integer trkdash
       character*10 fileid
       logical skip,charttrk
       logical idet,vdet,ddet,tdet,diag

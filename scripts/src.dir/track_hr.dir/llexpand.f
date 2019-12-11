@@ -7,6 +7,14 @@ c     possible.
 
 c     R.J. Murray, 9th Dec. 1992.
 
+c-------------------------------------------------------------------------
+c 
+c  Modified 11/12/2019, Ahmad Galea (Science IT University of Melbourne)
+c
+c  Made integer convesions on lines 129,272,276,289 explicit
+c
+c-------------------------------------------------------------------------
+
       real lon(nh),lat(nk),lon2(nh2),lat2(nk2)
       dimension fhk(nh,nk),f(nhk2lt)
       integer h,hhL,hhR,hhL1,hhR1,nh2
@@ -127,7 +135,7 @@ c-----------------------------------------------------------------------
         headrcst = head
         headrcst(49:56) = 'EXPANDED'
         write (iurcst) head
-        write (iurcst) (f(hk),hk=1,nhk2)
+        write (iurcst) (f(k),k=1,nhk2)
         close (iurcst)
       endif
 
@@ -270,11 +278,11 @@ c       Calculate values at Poles.
             if (ipoleSN.ge.2) then
               do 160 kkk = 1,nkksp
                 kksp(kkk) = kk0 - kksign*(nkksp+1-kkk)
-                ll(kkk) = float(kksign)*(lat2(kksp(kkk)) - polelat)
+                ll(kkk) = float(kksign)*(lat2(int(kksp(kkk))) - polelat)
   160         continue
               do 170 kkk = nkksp1,nspline
                 kksp(kkk) = kk0 - kksign*(nkksp-kkk)
-                ll(kkk) = float(kksign)*(lat2(kksp(kkk)) - polelat)
+                ll(kkk) = float(kksign)*(lat2(int(kksp(kkk))) - polelat)
   170         continue
               if (idiag.ge.3) then
                 write (6,*) ' '
@@ -287,7 +295,7 @@ c       Calculate values at Poles.
               do 180 ihh = 1,nhhsp
                 hh = hhL + ((ihh-1)*nhx)/nhhsp
                 do 175 kkk = 1,nspline
-                  ff(kkk) = f(hh,kksp(kkk))
+                  ff(kkk) = f(hh,int(kksp(kkk)))
   175           continue
                 call isplcf(ll,ff,cc,gam,nspline,1,nspline,0.,0.)
                 A1 = 0.5

@@ -6,6 +6,14 @@ c     writes it in formatted form.
 c     Written by Ross Murray.
 c     Last revised 10th Aug., 1995.
 
+c-------------------------------------------------------------------------
+c 
+c  Modified 11/12/2019, Ahmad Galea (Science IT University of Melbourne)
+c
+c  Added explicit trkdash decleration
+c
+c-------------------------------------------------------------------------
+
 c-----------------------------------------------------------------------
 c     Declarations
 c-----------------------------------------------------------------------
@@ -24,6 +32,7 @@ c     ------------------
       logical idet,vdet,fdet,tdet
 c     integer dastrt,dastop
       integer trk,da,hr
+      integer trkdash
       character*10 fileid
       logical ltrue,lfals
       data ltrue,lfals/.true.,.false./
