@@ -216,7 +216,7 @@ c
       if(iargc().eq.0)then
         write(*,*)' '
         write(*,*)'read_nc2cmp: Version 2.4 (Apr 14 2009)'
-	write(*,*)' '
+	      write(*,*)' '
         write(*,*)'Usage: read_nc2cmp [--help][-D idbg]',
      * '[-i ncfile][-o cmpfile][-d "lon,lat,time"]',
      * '[-u uservars][-U vunits][-v vtypes]',
@@ -230,239 +230,240 @@ c
      *	' 3= Print dimension arrays to file fort.10'
         write(*,*)'G: Duplicate data at lon to 360 (default: no)'
         write(*,*)'S: Output one file per time (default: all in one)'
-	write(*,*)'T: ttype: CDO, fcst'
-	write(*,*)'   fcst: Adds 6 hr to date-time; use with',
+	      write(*,*)'T: ttype: CDO, fcst'
+	      write(*,*)'   fcst: Adds 6 hr to date-time; use with',
      * 	' NCEP/NCEP2 10m winds'
         write(*,*)'Note: Max. sizes (characters) of text variables'
         write(*,*)'gridtype: 10 rtype: 5 vtypes: 8 units: 8' 
-	write(*,*)' '
-	write(*,*)'--help: Gives some examples '
+        write(*,*)' '
+        write(*,*)'--help: Gives some examples '
         write(*,*)' '
         stop
       else
         do k=1,maxvar
-	  uuvar(k)= ''
-	  vvunits(k)= ''
-	  vvtype(k)= ''
-	enddo
-	rtype= 'NCEP2'
-	vtype= 'Z500'
-	gtype= '2.5x2.5DEG'
-	uvar= 'hgt'
-	vunits= 'M'
+          uuvar(k)= ''
+          vvunits(k)= ''
+          vvtype(k)= ''
+        enddo
+        rtype= 'NCEP2'
+        vtype= 'Z500'
+        gtype= '2.5x2.5DEG'
+        uvar= 'hgt'
+        vunits= 'M'
         dvar(1)= 'lon'
         dvar(2)= 'lat'
         dvar(3)= 'time'
-	idbg= 0
-	ilev= 0
-	nlev= 0
-	lvar= 'levelist'
-	iscal= 0
-	uscal= 1.0
+        idbg= 0
+        ilev= 0
+        nlev= 0
+        lvar= 'levelist'
+        iscal= 0
+        uscal= 1.0
         udpath= 'udunits.dat'
         nmaps= 0
-	imapset= 0
-	ttype= ''
-	idt= 0
-	ddate(1)= 0000010100.
-	ddate(2)= 9999123118.
-	idrange= 0
-	fpx= ''
-	isepf= 0
-	nuvar= 1
-	nunvar= 0
-	nutvar= 0
-	iadd360= 0
-	cmpfile=''
-	narg= iargc()
-	i= 0
-	do while (i.le.narg)
-	  call getarg(i,optarg)
-	  if(optarg.eq.'--help')then
-	    call help
-	    stop
-	  elseif(optarg.eq.'-d')then
-	    i= i +1
-	    call getarg(i,optarg)
-	    read(optarg,*)(dvar(j),j=1,3) ! e.g. "lon,lat,time"
+        imapset= 0
+        ttype= ''
+        idt= 0
+        ddate(1)= 0000010100.
+        ddate(2)= 9999123118.
+        idrange= 0
+        fpx= ''
+        isepf= 0
+        nuvar= 1
+        nunvar= 0
+        nutvar= 0
+        iadd360= 0
+        cmpfile=''
+        narg= iargc()
+        i= 0
+        do while (i.le.narg)
+          call getarg(i,optarg)
+          if(optarg.eq.'--help')then
+            call help
+            stop
+          elseif(optarg.eq.'-d')then
+            i= i +1
+            call getarg(i,optarg)
+            read(optarg,*)(dvar(j),j=1,3) ! e.g. "lon,lat,time"
             write(*,*)'-d: dimensions are: '
             write(*,*)' - lon  variable: ',dvar(1)(1:ilen(dvar(1)))
             write(*,*)' - lat  variable: ',dvar(2)(1:ilen(dvar(2)))
             write(*,*)' - time variable: ',dvar(3)(1:ilen(dvar(3)))
-	  elseif(optarg.eq.'-i')then
-	    i= i +1
-	    call getarg(i,ncfile)
-	    inquire (file=ncfile,exist=lexist)
-	    if(.not.lexist)then
-	      write(*,*)'ERROR: NetCDF file: ',ncfile(1:ilen(ncfile)),
-     * ' not found'
-	      stop
-	    endif
-	  elseif(optarg.eq.'-g')then
-	    i= i +1
-	    call getarg(i,optarg)
-	    read(optarg,'(A)')gtype
-	  elseif(optarg.eq.'-l')then
-	    i= i +1
-	    call getarg(i,optarg)
-	    read(optarg,*)lvar   ! e.g. levelist
+          elseif(optarg.eq.'-i')then
+            i= i +1
+            call getarg(i,ncfile)
+            inquire (file=ncfile,exist=lexist)
+            if(.not.lexist)then
+              write(*,*)'ERROR: NetCDF file: ',ncfile(1:ilen(ncfile)),
+     *       ' not found'
+              stop
+            endif
+          elseif(optarg.eq.'-g')then
+            i= i +1
+            call getarg(i,optarg)
+            read(optarg,'(A)')gtype
+          elseif(optarg.eq.'-l')then
+            i= i +1
+            call getarg(i,optarg)
+            read(optarg,*)lvar   ! e.g. levelist
             write(*,*)' - level variable: ',lvar(:ilen(lvar))
-	  elseif(optarg.eq.'-m')then
-	    i= i +1
-	    call getarg(i,optarg)
-	    read(optarg,*)nmaps
-	  elseif(optarg.eq.'-p')then
-	    i= i +1
-	    call getarg(i,optarg)
-	    read(optarg,'(A)')udpath
+          elseif(optarg.eq.'-m')then
+            i= i +1
+            call getarg(i,optarg)
+            read(optarg,*)nmaps
+          elseif(optarg.eq.'-p')then
+            i= i +1
+            call getarg(i,optarg)
+            read(optarg,'(A)')udpath
             write(*,*)'NOTE: Path to udunits.dat:',
-     * udpath(1:ilen(udpath))
-	  elseif(optarg.eq.'-r')then
-	    i= i +1
-	    call getarg(i,optarg)
-	    read(optarg,*)rtype
-	  elseif(optarg.eq.'-s')then
-	    i= i +1
-	    call getarg(i,optarg)
-	    read(optarg,*)uscal
-	    write(*,*)'NOTE: User scaler: ',uscal
-	    iscal= 1
-	  elseif(optarg.eq.'-o')then
-	    i= i +1
-	    call getarg(i,cmpfile)
-	  elseif(optarg.eq.'-u')then
+     *      udpath(1:ilen(udpath))
+          elseif(optarg.eq.'-r')then
+            i= i +1
+            call getarg(i,optarg)
+            read(optarg,*)rtype
+          elseif(optarg.eq.'-s')then
+            i= i +1
+            call getarg(i,optarg)
+            read(optarg,*)uscal
+            write(*,*)'NOTE: User scaler: ',uscal
+            iscal= 1
+          elseif(optarg.eq.'-o')then
+            i= i +1
+            call getarg(i,cmpfile)
+          elseif(optarg.eq.'-u')then
             i= i +1
             call getarg(i,optarg)
             do k=1,maxvar
               uuvar(k)= ''
             enddo
-	    nuvar= maxvar
+	          nuvar= maxvar
             read(optarg,*,end=197)uuvar
 197         continue
             do k=1,maxvar
               if(uuvar(k).eq.'')then
-	        nuvar= k -1
-	        goto 203
-	      endif
+	              nuvar= k -1
+	              goto 203
+	            endif
             enddo
 203         continue
-	    write(*,*)'No. of user variables: ',nuvar
-	    write(*,*)'User variables: ',(uuvar(k),k=1,nuvar)
+            write(*,*)'No. of user variables: ',nuvar
+            write(*,*)'User variables: ',(uuvar(k),k=1,nuvar)
 c
-	  elseif(optarg.eq.'-t')then
-	    i= i +1
-	    call getarg(i,optarg)
+          elseif(optarg.eq.'-t')then
+            i= i +1
+            call getarg(i,optarg)
             do k=1,2
               ddate(k)= 0.
             enddo
-	    ndate= 2
+	          ndate= 2
             read(optarg,*,end=198)ddate
 198         continue
             do k=1,2
               if(ddate(k).eq.0)then
-	        ndate= k -1
-	        goto 202
-	      endif
+                ndate= k -1
+                goto 202
+	            endif
             enddo
 202         continue
-	    idrange= 1
-	    write(*,*)'No. of date arguments: ',ndate
-	    write(*,'(''Date range: '',2F12.0)')(ddate(k),k=1,ndate)
-	  elseif(optarg.eq.'-v')then
+            idrange= 1
+            write(*,*)'No. of date arguments: ',ndate
+            write(*,'(''Date range: '',2F12.0)')(ddate(k),k=1,ndate)
+	        elseif(optarg.eq.'-v')then
             i= i +1
             call getarg(i,optarg)
             do k=1,maxvar
               vvtype(k)= ''
             enddo
-	    nutvar= maxvar
+	          nutvar= maxvar
             read(optarg,*,end=195)vvtype
 195         continue
             do k=1,maxvar
               if(vvtype(k).eq.'')then
-	        nutvar= k -1
-	        goto 205
-	      endif
+	              nutvar= k -1
+	              goto 205
+	          endif
             enddo
 205         continue
-	    write(*,*)'No. of user variables: ',nutvar
-	    write(*,*)'User names of user variables: ',
+            write(*,*)'No. of user variables: ',nutvar
+            write(*,*)'User names of user variables: ',
      *	    (vvtype(k),k=1,nutvar)
 c
-	  elseif(optarg.eq.'-D')then
-	    i= i +1
-	    call getarg(i,optarg)
-	    read(optarg,*)idbg
-	  elseif(optarg.eq.'-G')then
-	    iadd360= 1 
-	  elseif(optarg.eq.'-L')then
+          elseif(optarg.eq.'-D')then
+            i= i +1
+            call getarg(i,optarg)
+            read(optarg,*)idbg
+          elseif(optarg.eq.'-G')then
+            iadd360= 1 
+          elseif(optarg.eq.'-L')then
 c
             i= i +1
             call getarg(i,optarg)
             do k=1,maxlev
               levind(k)= 0
             enddo
-	    nlev= maxlev
+	          nlev= maxlev
             read(optarg,*,end=199)levind
 199         continue
             do k=1,maxlev
               if(levind(k).eq.0)then
-	        nlev= k -1
-	        goto 201
-	      endif
+                nlev= k -1
+                goto 201
+              endif
             enddo
 201         continue
-	    write(*,*)'No. of levels: ',nlev
-	    write(*,*)'Level indices: ',(levind(k),k=1,nlev)
+            write(*,*)'No. of levels: ',nlev
+            write(*,*)'Level indices: ',(levind(k),k=1,nlev)
 c
-	  elseif(optarg.eq.'-M')then
-	    imapset= 1
-	    i= i +1
-	    call getarg(i,optarg)
-	    read(optarg,*)imap1,imap2   ! Map range to output
-	    write(*,*)'Output map range: ',imap1,' - ',imap2
-	  elseif(optarg.eq.'-P')then
-	    i= i +1
-	    call getarg(i,optarg)
-	    read(optarg,*)fpx   ! Map range to output
-	    write(*,*)'Output file prefix: ',fpx(:ilen(fpx))
-	  elseif(optarg.eq.'-S')then
-	    isepf= 1  ! Separate file output
-	  elseif(optarg.eq.'-T')then
-	    i= i +1
-	    call getarg(i,optarg)
-	    read(optarg,*)ttype
+          elseif(optarg.eq.'-M')then
+            imapset= 1
+            i= i +1
+            call getarg(i,optarg)
+            read(optarg,*)imap1,imap2   ! Map range to output
+            write(*,*)'Output map range: ',imap1,' - ',imap2
+          elseif(optarg.eq.'-P')then
+            i= i +1
+            call getarg(i,optarg)
+            read(optarg,*)fpx   ! Map range to output
+            write(*,*)'Output file prefix: ',fpx(:ilen(fpx))
+          elseif(optarg.eq.'-S')then
+            isepf= 1  ! Separate file output
+          elseif(optarg.eq.'-T')then
+            i= i +1
+            call getarg(i,optarg)
+            read(optarg,*)ttype
             if(ttype.eq.'CDO')then
               idt= 1
-	      write(*,*)'-T option: ttype= ',ttype,' idt=',idt
+	            write(*,*)'-T option: ttype= ',ttype,' idt=',idt
             elseif(ttype.eq.'fcst')then
               idt= 2
-	      write(*,*)'-T option: ttype= ',ttype,' idt=',idt
-	    else
+	            write(*,*)'-T option: ttype= ',ttype,' idt=',idt
+	          else
               write(*,*)'ERROR: ttype is invalid'
               write(*,*)'Choose: CDO only at this stage'
               stop
             endif
-	  elseif(optarg.eq.'-U')then
+	        elseif(optarg.eq.'-U')then
             i= i +1
             call getarg(i,optarg)
             do k=1,maxvar
               vvunits(k)= ''
             enddo
-	    nunvar= maxvar
+	          nunvar= maxvar
             read(optarg,*,end=196)vvunits
 196         continue
             do k=1,maxvar
               if(vvunits(k).eq.'')then
-	        nunvar= k -1
-	        goto 204
-	      endif
+                nunvar= k -1
+                goto 204
+              endif
             enddo
 204         continue
-	    write(*,*)'No. of user variables: ',nunvar
-	    write(*,*)'Units of user variables: ',(vvunits(k),k=1,nunvar)
+            write(*,*)'No. of user variables: ',nunvar
+            write(*,*)'Units of user variables: ',
+     *      (vvunits(k),k=1,nunvar)
 c
-	  endif
-	  i= i +1
+          endif
+          i= i +1
         enddo
       endif
  
@@ -477,33 +478,33 @@ c
 c
       if(isepf.eq.0.and.cmpfile.eq.'')then
         write(*,*)'ERROR: Specify -o option'
-	ierr= ierr +1
+	      ierr= ierr +1
       endif
       if(isepf.eq.1.and.cmpfile.ne.'')then
         write(*,*)'ERROR: Omit -o option with -S'
-	ierr= ierr +1
+	      ierr= ierr +1
       endif
 c
       if(nmaps.gt.0.and.imapset.eq.1)then
         write(*,*)'ERROR: Specify -m or -M, not both'
-	ierr= ierr +1
+	      ierr= ierr +1
       endif
 c
       if(idrange.eq.1.and.(nmaps.gt.0.or.imapset.eq.1))then
         write(*,*)'ERROR: Specify one of -t, -m or -M'
-	ierr= ierr +1
+	      ierr= ierr +1
       endif
 c
       if(nuvar.eq.0)then
         write(*,*)'ERROR: Specify at least one variable on -u option'
-	ierr= ierr +1
+	      ierr= ierr +1
       endif
 c
       if(nuvar.ne.nunvar.or.nuvar.ne.nutvar)then
         write(*,*)'ERROR: Specify same number of items',
      *	' on -u, -v and -U options (nuvar,nutvar,nunvar)'
         write(*,*)'nuvar,nutvar,nunvar: ',nuvar,nutvar,nunvar
-	ierr= ierr +1
+	      ierr= ierr +1
       endif
 c
 c * Stop here if ierr >0 
@@ -544,9 +545,9 @@ c * Inquire about the file
       call ncinq(ncid,ndims,nvars,ngatts,recdim,rcode)
 
       if(idbg.eq.1)then
-	write(6,*)'ndims= ',ndims
-	write(6,*)'nvars= ',nvars
-	write(6,*)'ngatts= ',ngatts
+        write(6,*)'ndims= ',ndims
+        write(6,*)'nvars= ',nvars
+        write(6,*)'ngatts= ',ngatts
       endif
             
       if (rcode.ne.0) then
@@ -567,26 +568,26 @@ c   in case they differ from listing order (see above call to ncdinq)
 
         write(*,*)'Inquiring about variables ...'
         i_uvar= 0
-	do i=1,nvars  !this corresponds to the variable i.d. (0,1,2.. in C)
-	   call ncvinq(ncid,i,rhname,rhtype,rhn,rhdims,rhnatt,rcode)
-	   if(idbg.eq.1)write(6,*)'For variable ',i,' name= ',rhname,
+        do i=1,nvars  !this corresponds to the variable i.d. (0,1,2.. in C)
+          call ncvinq(ncid,i,rhname,rhtype,rhn,rhdims,rhnatt,rcode)
+          if(idbg.eq.1)write(6,*)'For variable ',i,' name= ',rhname,
      *	' type= ',avartyp(rhtype),' (',rhtype,') no of dims ',rhn,
      * '  rhdims= ',(rhdims(j),j=1,rhn),' rhnatt= ',rhnatt
           if (rhname.eq.dvar(1)) then
             rhtype_lon= rhtype  ! Type for lon var 
-	    k_lon= i            ! ID for lon var
+	          k_lon= i            ! ID for lon var
           endif
           if (rhname.eq.dvar(2)) then
             rhtype_lat= rhtype  ! Type for lat var 
-	    k_lat= i            ! ID for lat var
+	          k_lat= i            ! ID for lat var
           endif
           if (rhname.eq.dvar(3)) then
             rhtype_time= rhtype ! Type for time var 
-	    k_time= i           ! ID for time var
+	          k_time= i           ! ID for time var
           endif
           if (rhname.eq.lvar) then
             rhtype_lev= rhtype  ! Type for level var 
-	    k_lev= i            ! ID for level var
+	          k_lev= i            ! ID for level var
           endif
           if (rhname.eq.uvar)then
             rhtype_uvar= rhtype ! Type for user variable (not used in
@@ -594,7 +595,7 @@ c   in case they differ from listing order (see above call to ncdinq)
             i_uvar= i           ! ID for user variable
             natt_uvar= rhnatt   ! No. of attributes for user variable
           endif
-	enddo
+	      enddo
 c        
         if(i_uvar.eq.0) then
           write(*,*)'ERROR: User var (',uvar(:ilen(uvar)),
@@ -611,25 +612,25 @@ c * Inquire about the dimensions
       nlats= 0
       ntimes= 0
       do i=1,ndims
-         call ncdinq(ncid,i,dim_name(i),size(i),rcode)
-	 if(idbg.eq.1)write(6,*)'i=',i,' dim_name= ',dim_name(i),
+        call ncdinq(ncid,i,dim_name(i),size(i),rcode)
+	      if(idbg.eq.1)write(6,*)'i=',i,' dim_name= ',dim_name(i),
      * ' size=',size(i)
          if(dim_name(i).eq.dvar(1))then ! Lon variable
-           nlons= size(i)
-           i_lon= i
+            nlons= size(i)
+            i_lon= i
          endif
          if(dim_name(i).eq.dvar(2))then ! Lat variable
-           nlats= size(i)
-           i_lat= i
+            nlats= size(i)
+            i_lat= i
          endif
          if(dim_name(i).eq.dvar(3))then ! Time variable
-           ntimes= size(i)
-           i_time= i
+            ntimes= size(i)
+            i_time= i
          endif
          if(nlev.gt.0) then  ! There is a level variable - was ilev KK 10/4/2009
            if(dim_name(i).eq.lvar)then
-             nlevs= size(i)
-             i_lev = i
+              nlevs= size(i)
+               i_lev = i
            endif
          endif
          if (rcode.ne.0) then
@@ -668,10 +669,10 @@ c * Ensure correct order of dimensions
         i_time= k_time
 c
         if(idbg.gt.0)then
-	  write(*,*)'*** Adjusted order of dimensions'
+	        write(*,*)'*** Adjusted order of dimensions'
           write(*,*)'i_lon,i_lat,i_lev,i_time:'
           write(*,*)i_lon,i_lat,i_lev,i_time
-	endif
+	      endif
 
 c--------------------------------------------------------------------
 c * Read longitudes - usually real values but might be double precision
@@ -693,44 +694,44 @@ C
       if (rcode.eq.0) then
 ckk         write(6,*) "show longitudes?"
 ckk         read(5,*) yn
-         if(yn.eq.'y'.or.yn.eq.'Y'.or.idbg.eq.3) then
+        if(yn.eq.'y'.or.yn.eq.'Y'.or.idbg.eq.3) then
             write(10,*)
             write(10,*) "----- Longitudes -----"
             do i=1,nlons
-               if(rhtype_lon.eq.5)then
-                 write(10,600) i, lons(i)
-               elseif(rhtype_lon.eq.6)then
-                 write(10,605) i, dlons(i)
-	       endif
+              if(rhtype_lon.eq.5)then
+                write(10,600) i, lons(i)
+              elseif(rhtype_lon.eq.6)then
+                write(10,605) i, dlons(i)
+	            endif
 600   format("lon(",i3,") = ",f6.1)
 605   format("lon(",i3,") = ",f12.6)
             enddo
-         endif
+        endif
 c * Ensure that real array lons is set
-	 if(rhtype_lon.eq.6)then
-	   write(*,*)'Converting double lons to real ...'
-           do i=1,nlons
-	     lons(i)= real(dlons(i))
-	   enddo
-	 endif
+        if(rhtype_lon.eq.6)then
+          write(*,*)'Converting double lons to real ...'
+          do i=1,nlons
+	          lons(i)= real(dlons(i))
+	        enddo
+	      endif
       else
-         write(6,*) "Error in reading longitudes: stopped"
-         stop
+          write(6,*) "Error in reading longitudes: stopped"
+          stop
       endif
 c
 c * Check for -G option
 c
       if(iadd360.eq.1)then
         dlon= lons(2) -lons(1)
- 	xlon360= lons(nlons) +dlon
- 	if(lons(1).eq.0.and.xlon360.eq.360)then
-	  write(*,*)'NOTE: Grid consistent with -G option'
-	else
-	  write(*,*)'ERROR: First or last longitude is not'
-	  write(*,*)'consistent with -G option'
-	  write(*,*)'lons (1)=',lons(1),' lons (',nlons,')=',lons(nlons)
-	  write(*,*)'ABORT: Due to error'
-	  stop
+        xlon360= lons(nlons) +dlon
+        if(lons(1).eq.0.and.xlon360.eq.360)then
+          write(*,*)'NOTE: Grid consistent with -G option'
+        else
+          write(*,*)'ERROR: First or last longitude is not'
+          write(*,*)'consistent with -G option'
+          write(*,*)'lons (1)=',lons(1),' lons (',nlons,')=',lons(nlons)
+          write(*,*)'ABORT: Due to error'
+          stop
         endif
       endif
 
@@ -754,26 +755,26 @@ C
       if (rcode.eq.0) then
 ckk         write(6,*) "show latitudes?"
 ckk         read(5,*) yn
-         if(yn.eq.'y'.or.yn.eq.'Y'.or.idbg.eq.3) then
-            write(10,*)
-            write(10,*) "----- Latitudes -----"
-            do i=1,nlats
-               if(rhtype_lat.eq.5)then
-                 write(10,510) i, lats(i)
-               elseif(rhtype_lat.eq.6)then
-                 write(10,515) i, dlats(i)
-	       endif
+        if(yn.eq.'y'.or.yn.eq.'Y'.or.idbg.eq.3) then
+          write(10,*)
+          write(10,*) "----- Latitudes -----"
+          do i=1,nlats
+            if(rhtype_lat.eq.5)then
+              write(10,510) i, lats(i)
+            elseif(rhtype_lat.eq.6)then
+              write(10,515) i, dlats(i)
+	          endif
 510   format("lat(",i2,") = ",f6.1)
 515   format("lat(",i2,") = ",f12.6)
-            enddo
-         endif
+          enddo
+        endif
 c * Ensure that real array lats is set
-	 if(rhtype_lat.eq.6)then
-	   write(*,*)'Converting double lats to real ...'
-           do i=1,nlats
-	     lats(i)= real(dlats(i))
-	   enddo
-	 endif
+        if(rhtype_lat.eq.6)then
+          write(*,*)'Converting double lats to real ...'
+            do i=1,nlats
+            lats(i)= real(dlats(i))
+          enddo
+        endif
       else
          write(6,*) "Error in reading latitudes: stopped"
          stop
@@ -801,8 +802,8 @@ C
       endif
 C      
       if (rcode.eq.0) then
-         if(idbg.eq.3) then
-	    write(10,*)
+        if(idbg.eq.3) then
+	        write(10,*)
             write(10,*) "----- Levels -----"
             do i=1,nlevs
                if(rhtype_lev.eq.4)then
@@ -906,7 +907,7 @@ c * Open concatenated conmap file (if -S option not specified)
 c
         if(isepf.eq.0)then
           open (2,file=cmpfile,form='unformatted')
-	endif
+	      endif
 c
         idbg2= 1 ! gridread will return this as zero; used to print
                 ! some info on first pass
@@ -916,14 +917,14 @@ c   Also note effect of -M option
 c
         if(nmaps.gt.0) then
           ntime =  nmaps
-	  imap1= 1
-	  imap2= ntime
-        else
-          ntime= ntimes
-	  if(imapset.eq.0)then
-	    imap1= 1
-	    imap2= ntime
-	  endif
+          imap1= 1
+          imap2= ntime
+              else
+                ntime= ntimes
+          if(imapset.eq.0)then
+            imap1= 1
+            imap2= ntime
+          endif
         endif
 ckk        if(imapset.eq.0)then
 ckk          write(*,*)'No. of maps (times) to be extracted: ',ntime
@@ -935,13 +936,13 @@ ckk        endif
 c
 c * Set up limits for level loop
 c
-       if(nlev.eq.0)then
-         ilev1= 1
-	 ilev2= 1
-       else
-         ilev1= 1
-	 ilev2= nlev
-       endif
+      if(nlev.eq.0)then
+        ilev1= 1
+	      ilev2= 1
+      else
+        ilev1= 1
+	      ilev2= nlev
+      endif
  
 c--------------------------------------------------------------------
 c * Main processing stage
@@ -953,59 +954,62 @@ c
 c
        kmap= 0  ! Map counter
 c
-       do it=1,ntime
+      do it=1,ntime
 c
 c * End processing if it exceeds time or date range
 c
-         if(it.gt.imap2.or.cddate.gt.ddate(2))then
-	   goto 5100
-	 endif
+        if(it.gt.imap2.or.cddate.gt.ddate(2))then
+	        goto 5100
+	      endif
 c
-         do kv=1,nuvar
+        do kv=1,nuvar
 c
-           uvar= uuvar(kv)   ! User variable from -u option
-	   vunits= vvunits(kv) ! Units of user variable from -U option
-	   vtype= vvtype(kv) ! User names of user variable from -v option
-           vtype0= vtype  ! Save vtype
+          uvar= uuvar(kv)   ! User variable from -u option
+          vunits= vvunits(kv) ! Units of user variable from -U option
+          vtype= vvtype(kv) ! User names of user variable from -v option
+          vtype0= vtype  ! Save vtype
 c
 c--------------------------------------------------------------------
 c * Inquire about variable uvar 
 
-        if(idbg.ge.2)write(*,*)'Inquiring about user variable: ',uvar
-        i_uvar= 0
-	do i=1,nvars  !this corresponds to the variable i.d. (0,1,2.. in C)
-	   call ncvinq(ncid,i,rhname,rhtype,rhn,rhdims,rhnatt,rcode)
-	   if(idbg.eq.1)write(6,*)'For variable ',i,' name= ',rhname,
-     *	' type= ',avartyp(rhtype),' (',rhtype,') no of dims ',rhn,
-     * '  rhdims= ',(rhdims(j),j=1,rhn),' rhnatt= ',rhnatt
-          if (rhname.eq.uvar)then
-            rhtype_uvar= rhtype ! Type for user variable (not used in
-                                ! this version)
-            i_uvar= i           ! ID for user variable
-            natt_uvar= rhnatt   ! No. of attributes for user variable
-          endif
-	enddo
+          if(idbg.ge.2)write(*,*)'Inquiring about user variable: ',uvar
+            i_uvar= 0
+	          do i=1,nvars  !this corresponds to the variable i.d. (0,1,2.. in C)
+              call ncvinq(ncid,i,rhname,rhtype,rhn,rhdims,rhnatt,
+     *        rcode)
+              if(idbg.eq.1)then
+                write(6,*)'For variable ',i,' name= ',rhname,
+     *	       ' type= ',avartyp(rhtype),' (',rhtype,') no of dims ',
+     *         rhn,'  rhdims= ',(rhdims(j),j=1,rhn),' rhnatt= ',rhnatt
+              endif
+              if (rhname.eq.uvar)then
+                rhtype_uvar= rhtype ! Type for user variable (not used in
+                                 ! this version)
+                i_uvar= i           ! ID for user variable
+                natt_uvar= rhnatt   ! No. of attributes for user variable
+              endif
+	          enddo
 
 c--------------------------------------------------------------------
 c * Get the scale_factor and add_offset attributes for 
 c   the user variable uvar
 
-      if(idbg.ge.2)write(*,*)'Reading attributes ...'
-      j_scale_factor= 0
-      j_add_offset= 0
-      do j=1,natt_uvar
+        if(idbg.ge.2)write(*,*)'Reading attributes ...'
+        j_scale_factor= 0
+        j_add_offset= 0
+        do j=1,natt_uvar
 c * Get attribute names
-        call ncanam(ncid,i_uvar,j,attnam(i,j),rcode)
-        if(idbg.ge.2)write(*,*)'i,j,attnam:',i,j,attnam(i,j)
-        if (attnam(i,j).eq.'scale_factor')then
-          j_scale_factor= j
-        endif
-        if (attnam(i,j).eq.'add_offset')then
-          j_add_offset= j
-        endif
-        if (attnam(i,j).eq.'missing_value')then
-          j_miss= j
-        endif
+          call ncanam(ncid,i_uvar,j,attnam(i,j),rcode)
+          if(idbg.ge.2)write(*,*)'i,j,attnam:',i,j,attnam(i,j)
+          if (attnam(i,j).eq.'scale_factor')then
+            j_scale_factor= j
+          endif
+          if (attnam(i,j).eq.'add_offset')then
+            j_add_offset= j
+          endif
+          if (attnam(i,j).eq.'missing_value')then
+            j_miss= j
+          endif
 c ---
 ckk          call ncainq(ncid,i_uvar,attnam(i,j),attype(i,j),attlen(i,j),
 ckk     * rcode)
@@ -1018,78 +1022,79 @@ ckk            if(attype(i,j).eq.6)
 ckk     *        call ncagt(ncid,i_uvar,attnam(i,j),dble_att,rcode)
 ckk          typ_scale_factor= attype(i,j)
 c ---
-      enddo
-      if(idbg.ge.2)then
-        if(j_scale_factor.eq.0)write(*,*)'Note: No scale_factor',
-     *	' attribute'
-        if(j_add_offset.eq.0)write(*,*)'Note: No add_offset attribute'
-        if(j_miss.eq.0)write(*,*)'Note: No missing_value attribute'
-      endif
+        enddo
+        if(idbg.ge.2)then
+          if(j_scale_factor.eq.0)write(*,*)'Note: No scale_factor',
+     *	  ' attribute'
+          if(j_add_offset.eq.0)write(*,*)'Note: No add_offset ',
+     *    'attribute'
+          if(j_miss.eq.0)write(*,*)'Note: No missing_value attribute'
+        endif
  
 c--------------------------------------------------------------------
-         do l=ilev1,ilev2
-           if(nlev.gt.0)then
-	     ilev= levind(l)
-	   endif
-	   if(idbg.ge.2)write(10,*)'ilev,it: ',ilev,it
+        do l=ilev1,ilev2
+          if(nlev.gt.0)then
+            ilev= levind(l)
+          endif
+          if(idbg.ge.2)write(10,*)'ilev,it: ',ilev,it
 c
 c * User selected level - make appropriate label
 c
-        if(ilev.gt.0)then
-          if(rhtype_lev.eq.4)then
-	    levu= int(ilevels(ilev))
-          elseif(rhtype_lev.eq.5)then
-	    levu= levels(ilev)
-          elseif(rhtype_lev.eq.6)then
-	    levu= real(dlevels(ilev))
-          endif
-	  if(idbg.ge.2)then
-	    write(10,*)'User selected level: Index ',
-     * ilev,' gives level: ',levu,' )'
-	  endif
-	  if(uvar.eq.'Z'.or.uvar.eq.'z'.or.
-     * uvar.eq.'HGT'.or.uvar.eq.'hgt')then	       ! Geopotential
-	    if(levu.lt.10)then
-	      fmt= '(''Z'',I1,6x)'
-	    elseif(levu.ge.10.and.levu.lt.100)then
-	      fmt= '(''Z'',I2,5x)'
-	    elseif(levu.ge.100.and.levu.lt.1000)then
-	      fmt= '(''Z'',I3,4x)'
-	    elseif(levu.ge.1000)then
-	      fmt= '(''Z'',I4,3x)'
-	    endif
-	    write(vtype,fmt)levu
+          if(ilev.gt.0)then
+            if(rhtype_lev.eq.4)then
+              levu= int(ilevels(ilev))
+            elseif(rhtype_lev.eq.5)then
+              levu= levels(ilev)
+            elseif(rhtype_lev.eq.6)then
+              levu= real(dlevels(ilev))
+            endif
+            if(idbg.ge.2)then
+              write(10,*)'User selected level: Index ',
+     *        ilev,' gives level: ',levu,' )'
+            endif
+            if(uvar.eq.'Z'.or.uvar.eq.'z'.or.
+     *      uvar.eq.'HGT'.or.uvar.eq.'hgt')then	       ! Geopotential
+              if(levu.lt.10)then
+                fmt= '(''Z'',I1,6x)'
+              elseif(levu.ge.10.and.levu.lt.100)then
+                fmt= '(''Z'',I2,5x)'
+              elseif(levu.ge.100.and.levu.lt.1000)then
+                fmt= '(''Z'',I3,4x)'
+              elseif(levu.ge.1000)then
+                fmt= '(''Z'',I4,3x)'
+              endif
+              write(vtype,fmt)levu
 ckk	    write(*,*)'New vtype label: ',vtype(1:ilen(vtype))
-          else  ! Other variables
-	    iv= ilen(vtype0)
-	    ivx= len(vtype0) -ilen(vtype0)
-	    cvtype= vtype0
-            if(levu.eq.0)then
-	      write(fmt,*)'(A',iv,',',ivx,'X)'
-	    elseif(levu.gt.0.and.levu.lt.10)then
-	      write(fmt,*)'(A',iv,',I1,',ivx,'X)'
-	    elseif(levu.ge.10.and.levu.lt.100)then
-	      write(fmt,*)'(A',iv,',I2,',ivx,'X)'
-	    elseif(levu.ge.100.and.levu.lt.1000)then
-	      write(fmt,*)'(A',iv,',I3,',ivx,'X)'
-	    elseif(levu.ge.1000)then
-	      write(fmt,*)'(A',iv,',I4,',ivx,'X)'
-	    endif
-	    if(levu.gt.0)then
-	      write(vtype,fmt)cvtype(1:iv),levu
-	    else
-	      write(vtype,fmt)cvtype(1:iv)
-	    endif
+            else  ! Other variables
+              iv= ilen(vtype0)
+              ivx= len(vtype0) -ilen(vtype0)
+              cvtype= vtype0
+              if(levu.eq.0)then
+                write(fmt,*)'(A',iv,',',ivx,'X)'
+              elseif(levu.gt.0.and.levu.lt.10)then
+                write(fmt,*)'(A',iv,',I1,',ivx,'X)'
+              elseif(levu.ge.10.and.levu.lt.100)then
+                write(fmt,*)'(A',iv,',I2,',ivx,'X)'
+              elseif(levu.ge.100.and.levu.lt.1000)then
+                write(fmt,*)'(A',iv,',I3,',ivx,'X)'
+              elseif(levu.ge.1000)then
+                write(fmt,*)'(A',iv,',I4,',ivx,'X)'
+              endif
+              if(levu.gt.0)then
+                write(vtype,fmt)cvtype(1:iv),levu
+              else
+                write(vtype,fmt)cvtype(1:iv)
+              endif
 ckk	    write(*,*)'New vtype label: ',vtype(1:ilen(vtype))
-	  endif
-	else  ! ilev is 0
-	  iv= ilen(vtype0)
-	  ivx= len(vtype0) -ilen(vtype0)
-	  cvtype= vtype0
-	  write(fmt,*)'(A',iv,',',ivx,'X)'
-	  write(vtype,fmt)cvtype(1:iv)
+            endif
+          else  ! ilev is 0
+            iv= ilen(vtype0)
+            ivx= len(vtype0) -ilen(vtype0)
+            cvtype= vtype0
+            write(fmt,*)'(A',iv,',',ivx,'X)'
+            write(vtype,fmt)cvtype(1:iv)
 ckk	  write(*,*)'New vtype label: ',vtype(1:ilen(vtype))
-	endif
+	        endif
 
 c--------------------------------------------------------------------
 c
@@ -1098,119 +1103,120 @@ c * Note: dvar(3) is the time variable and rhtype_time is the type
 c * This version should allow adjustable dimensions nlons,nlats
 c   rather than the fixed values ilon,jlat
 
-         call gridread(ncid,i_uvar,dvar(3),rhtype_time,
-     * j_scale_factor,j_add_offset,
-     * it,nlats,nlons,ilev,ny,nm,nd,nh,ttype,idt,xfcst,idbg,idbg2)
+          call gridread(ncid,i_uvar,dvar(3),rhtype_time,
+     *    j_scale_factor,j_add_offset,
+     *    it,nlats,nlons,ilev,ny,nm,nd,nh,ttype,idt,xfcst,idbg,idbg2)
 c
 c * Now have the map for this time
 ckk	 write(31,*)'ny,nm,nd,nh: ',ny,nm,nd,nh
 c--------------------------------------------------------------------
 
 c
-         if(idrange.eq.0)then
+          if(idrange.eq.0)then
 c
 c * If map is within specified limits append to output conmap file
 c   - see -M option
 c   Otherwise imap1=i 1 and imap2= ntime
 c
-         if (it.ge.imap1.and.it.le.imap2) then
+            if (it.ge.imap1.and.it.le.imap2) then
 c
 c * Put array x into conmap format and append to concatenated conmap file
 c
-           if(isepf.eq.1)then
-	     if(kv.eq.1)then
-	     if(l.eq.ilev1)then
-               cddate= 1000000*ny +10000*nm +100*nd +nh
-	       if(fpx.eq.'')then
-	         write(cmpfile ,'(F11.0,''cmp'')')cddate
-	       else
-               write(cmpfile ,'(A,''.'',F11.0,''cmp'')')fpx(:ilen(fpx)),
-     * cddate
-	       endif
-	       open (2,file=cmpfile,form='unformatted')
+              if(isepf.eq.1)then
+                if(kv.eq.1)then
+                  if(l.eq.ilev1)then
+                    cddate= 1000000*ny +10000*nm +100*nd +nh
+                    if(fpx.eq.'')then
+                      write(cmpfile ,'(F11.0,''cmp'')')cddate
+                    else
+                      write(cmpfile ,'(A,''.'',F11.0,''cmp'')')
+     *                fpx(:ilen(fpx)),cddate
+                    endif
+                    open (2,file=cmpfile,form='unformatted')
 ckk	       write(*,*)cmpfile(:ilen(cmpfile))
-	       write(*,*)'Output file: ',cmpfile(:ilen(cmpfile))
-	     endif
-	     endif
-	   endif
+                    write(*,*)'Output file: ',cmpfile(:ilen(cmpfile))
+                  endif
+                endif
+              endif
 c
 c * Set conmap header
 c
-           call sethead (vtype,vunits,ny,nm,nd,nh,rtype,gtype,head)
-	   write(*,700)it,head ! Write on screen just prior to output
-700        format(I6,':',A)
-           kmap= kmap +1
-           call x2cmp (vtype,rtype,nlons,nlats,lons,lats,head,x,rwork,
-     * iscal,uscal,iadd360,2)
-           if(isepf.eq.1)then
-	     if(kv.eq.nuvar.and.l.eq.ilev2)close(2)
-	   endif
-         endif
-       else
+              call sethead (vtype,vunits,ny,nm,nd,nh,rtype,gtype,head)
+              write(*,700)it,head ! Write on screen just prior to output
+700     format(I6,':',A)
+              kmap= kmap +1
+              call x2cmp (vtype,rtype,nlons,nlats,lons,lats,head,x,
+     *        rwork,iscal,uscal,iadd360,2)
+              if(isepf.eq.1)then
+                if(kv.eq.nuvar.and.l.eq.ilev2)close(2)
+                endif
+              endif
+            else
 c
 c * Use -t option (based on date range)
 c
-         cddate= 1000000*ny +10000*nm +100*nd +nh
-	 if (ndate.eq.1)then
-	   ldate= (cddate.eq.ddate(1))
-	 elseif (ndate.eq.2) then
-	   ldate= (cddate.ge.ddate(1).and.cddate.le.ddate(2))
-	 endif
-	 if(idbg.gt.0)then
-           write(10,'(''cddate: '',F11.0,'' ldate: '',L1)')cddate,ldate
-	 endif
-	 if(ldate)then
-           if(isepf.eq.1)then
-	     if(kv.eq.1)then
-	     if(l.eq.ilev1)then
-               cddate= 1000000*ny +10000*nm +100*nd +nh
-	       if(fpx.eq.'')then
-	         write(cmpfile ,'(F11.0,''cmp'')')cddate
-	       else
-	       write(cmpfile ,'(A,''.'',F11.0,''cmp'')')fpx(:ilen(fpx)),
-     * cddate
-	       endif
-	       write(*,*)'Output file: ',cmpfile(:ilen(cmpfile))
-	       open (2,file=cmpfile,form='unformatted')
-	     endif
-	     endif
-	   endif
+            cddate= 1000000*ny +10000*nm +100*nd +nh
+            if (ndate.eq.1)then
+              ldate= (cddate.eq.ddate(1))
+            elseif (ndate.eq.2) then
+              ldate= (cddate.ge.ddate(1).and.cddate.le.ddate(2))
+            endif
+            if(idbg.gt.0)then
+              write(10,'(''cddate: '',F11.0,'' ldate: '',L1)')cddate,
+     *        ldate
+            endif
+            if(ldate)then
+              if(isepf.eq.1)then
+                if(kv.eq.1)then
+                  if(l.eq.ilev1)then
+                    cddate= 1000000*ny +10000*nm +100*nd +nh
+                    if(fpx.eq.'')then
+                      write(cmpfile ,'(F11.0,''cmp'')')cddate
+                    else
+                      write(cmpfile ,'(A,''.'',F11.0,''cmp'')')
+     *                fpx(:ilen(fpx)),cddate
+                    endif
+                    write(*,*)'Output file: ',cmpfile(:ilen(cmpfile))
+                    open (2,file=cmpfile,form='unformatted')
+                  endif
+                endif
+              endif
 c
-           call sethead (vtype,vunits,ny,nm,nd,nh,rtype,gtype,head)
-	   write(*,700)it,head ! Write on screen just prior to output
-           kmap= kmap +1
-           call x2cmp (vtype,rtype,nlons,nlats,lons,lats,head,x,rwork,
-     * iscal,uscal,iadd360,2)
-           if(isepf.eq.1)then
-	     if(kv.eq.nuvar.and.l.eq.ilev2)close(2)
-	   endif
-         endif
-       endif
+              call sethead (vtype,vunits,ny,nm,nd,nh,rtype,gtype,head)
+              write(*,700)it,head ! Write on screen just prior to output
+              kmap= kmap +1
+              call x2cmp (vtype,rtype,nlons,nlats,lons,lats,head,x,
+     *        rwork,iscal,uscal,iadd360,2)
+              if(isepf.eq.1)then
+                if(kv.eq.nuvar.and.l.eq.ilev2)close(2)
+                endif
+              endif
+            endif
 c
-       if(idbg.ge.2)write(*,*)'End l loop:  l= ',l
-       enddo   ! End of l loop
+            if(idbg.ge.2)write(*,*)'End l loop:  l= ',l
+          enddo   ! End of l loop
 c
-       if(idbg.ge.2)write(*,*)'End kv loop: kv= ',kv
-       enddo   ! End of kv loop
+          if(idbg.ge.2)write(*,*)'End kv loop: kv= ',kv
+        enddo   ! End of kv loop
 c
-       if(idbg.ge.2)write(*,*)'End it loop: it= ',it
-       enddo   ! End of it loop
+        if(idbg.ge.2)write(*,*)'End it loop: it= ',it
+      enddo   ! End of it loop
 c
 
-5100   continue
-       write(*,*)'Processing completed'
+5100  continue
+      write(*,*)'Processing completed'
 
 c ---------------------------------------------------------------------
 
-       if(nlev.eq.0)then
-         ktmap= kmap/(nuvar)
-       else
-         ktmap= kmap/(nlev*nuvar)
-       endif
-       write(*,*)'No. of time steps extracted: ',ktmap
-       write(*,*)'No. of maps extracted: ',kmap
-       write(*,*)'No. of user variables: ',nuvar
-       write(*,*)'No. of levels: ',nlev
+      if(nlev.eq.0)then
+        ktmap= kmap/(nuvar)
+      else
+        ktmap= kmap/(nlev*nuvar)
+      endif
+      write(*,*)'No. of time steps extracted: ',ktmap
+      write(*,*)'No. of maps extracted: ',kmap
+      write(*,*)'No. of user variables: ',nuvar
+      write(*,*)'No. of levels: ',nlev
 c
 c * Close NetCDF file
 c
@@ -1225,14 +1231,14 @@ c
 c
 c * Close concatenated conmap file
 c
-       if(isepf.eq.0)then
-         close(2)
-         write(*,*)'Output conmap file: ',cmpfile(1:ilen(cmpfile))
-       endif
+      if(isepf.eq.0)then
+        close(2)
+        write(*,*)'Output conmap file: ',cmpfile(1:ilen(cmpfile))
+      endif
 c
-       write(*,*)'Finished!'
+      write(*,*)'Finished!'
 c
-       end
+      end
 
 c ---------------------------------------------------------------------
 C
@@ -1373,23 +1379,23 @@ c   double precision (xtime) so checks are made on the
 c   input time variable (KK)
 c
       if(idt.eq.0.or.idt.eq.2)then
-      unitptr=utmake()
+        unitptr=utmake()
 ckk      itimeid=NCVID(inet,'time',icode)
-      itimeid=NCVID(inet,time_var,icode)
-      call ncainq(inet,itimeid,'units',iNCCHAR,mlen,i)
-      unitstrin= ' '
-      unitstr= ' '
-      call ncagtc(inet,itimeid,'units',unitstrin,mlen,icode)
-      unitstr=unitstrin(1:nblen(unitstrin))
+        itimeid=NCVID(inet,time_var,icode)
+        call ncainq(inet,itimeid,'units',iNCCHAR,mlen,i)
+        unitstrin= ' '
+        unitstr= ' '
+        call ncagtc(inet,itimeid,'units',unitstrin,mlen,icode)
+        unitstr=unitstrin(1:nblen(unitstrin))
 ckk      unitstr= 'hours since 1900-01-01 00:00:0.0'
-      if(idbg.eq.2.and.idbg2.eq.1)
-     *   write(*,*)'unitstr:',unitstr(1:nblen(unitstr))
-      retcode_utdec=utdec(unitstr,unitptr)
-      retcode_uttime=uttime(unitptr)
-      isave=1
-      elseif(idt.eq.1)then ! ttype = 'CDO'
-      itimeid=NCVID(inet,time_var,icode)
-      endif
+        if(idbg.eq.2.and.idbg2.eq.1)
+     *    write(*,*)'unitstr:',unitstr(1:nblen(unitstr))
+          retcode_utdec=utdec(unitstr,unitptr)
+          retcode_uttime=uttime(unitptr)
+          isave=1
+        elseif(idt.eq.1)then ! ttype = 'CDO'
+          itimeid=NCVID(inet,time_var,icode)
+        endif
 
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
@@ -1400,7 +1406,7 @@ C     GET SCALE FACTOR AND MISSING VALUE IF NECESSARY
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 c * Next line is unchanged from example program (KK)      
-      call NCPOPT(0)	!Turn off netCDF error reaction
+        call NCPOPT(0)	!Turn off netCDF error reaction
 c
 c---
 c      call ncagt(inet,ivar,'scale_factor',dxscale,icode1)
@@ -1412,17 +1418,17 @@ c---
 c
 c * Get required attributes; convert to real values
 c
-          xscale= 1.
-          xoff= 0.
+        xscale= 1.
+        xoff= 0.
 c
-          if(jscale_factor.ne.0)then
+        if(jscale_factor.ne.0)then
           i= ivar
           j= jscale_factor  ! scale_factor
           call ncanam(inet,i,j,attnam(i,j),rcode) ! Get attribute name
           if(idbg.eq.2.and.idbg2.eq.1)
-     *       write(*,*)'i,j,attnam:',i,j,attnam(i,j)
+     *      write(*,*)'i,j,attnam:',i,j,attnam(i,j)
           call ncainq(inet,i,attnam(i,j),attype(i,j),attlen(i,j),
-     * rcode)
+     *     rcode)
           if(attype(i,j).ne.2) then  ! Not a character attribute
             if(attype(i,j).eq.4)then
               call ncagt(inet,i,attnam(i,j),int_att,icode1)
@@ -1437,16 +1443,16 @@ c
               xscale= real(dble_att)
             endif
           endif
-          endif
+        endif
 c
-          if(jadd_offset.ne.0)then
+        if(jadd_offset.ne.0)then
           i= ivar
           j= jadd_offset  ! add_offset
           call ncanam(inet,i,j,attnam(i,j),rcode) ! Get attribute name
           if(idbg.eq.2.and.idbg2.eq.1)
      *       write(*,*)'i,j,attnam:',i,j,attnam(i,j)
           call ncainq(inet,i,attnam(i,j),attype(i,j),attlen(i,j),
-     * rcode)
+     *      rcode)
           if(attype(i,j).ne.2) then  ! Not a character attribute
             if(attype(i,j).eq.4)then
               call ncagt(inet,i,attnam(i,j),int_att,icode2)
@@ -1461,60 +1467,60 @@ c
               xoff= real(dble_att)
             endif
           endif
-          endif
+        endif
 c
 c * Assume missing_value has same type as user variable (usual case)
 c
-         call ncvinq(inet, ivar, varname, vartype, ndims, dims, natts,
+        call ncvinq(inet, ivar, varname, vartype, ndims, dims, natts,
      +               rtncode)
-         if (rtncode .ne. ncnoerr) then
+        if (rtncode .ne. ncnoerr) then
             print *, 'Error calling nf_inq_vartype.'
             stop
-         endif
-      if(vartype.eq.3)then  ! integer*2
-              call ncagt(inet,ivar,'missing_value',miss,icode3)
-      elseif(vartype.eq.5)then  ! real
-              call ncagt(inet,ivar,'missing_value',rmiss,icode3)
-      elseif(vartype.eq.6)then  ! real*8 
-              call ncagt(inet,ivar,'missing_value',dmiss,icode3)
-      endif
+        endif
+        if(vartype.eq.3)then  ! integer*2
+          call ncagt(inet,ivar,'missing_value',miss,icode3)
+        elseif(vartype.eq.5)then  ! real
+          call ncagt(inet,ivar,'missing_value',rmiss,icode3)
+        elseif(vartype.eq.6)then  ! real*8 
+          call ncagt(inet,ivar,'missing_value',dmiss,icode3)
+        endif
 c
-      if(idbg.eq.2.and.idbg2.eq.1)then
-        write(*,*)'scale_factor: ',xscale
-        write(*,*)'add_offset: ',xoff
-      endif
+        if(idbg.eq.2.and.idbg2.eq.1)then
+          write(*,*)'scale_factor: ',xscale
+          write(*,*)'add_offset: ',xoff
+        endif
 c
 C     you need to get level or else use integer level
 C     SLAB INFO FOR DATA ARRAY
 
 C     see if packed or not!!!!
-      ipack=0
-      if((icode1 .eq. 0) .and. (icode2 .eq. 0)) then
-        isdfltao = 0
-        isdfltsf = 0
-        if (abs(xscale - 1.0) .lt. 1.0e-10) then
-            isdfltsf = 1
-        endif
-        if (abs(xoff) .lt. 1.0e-10) then
-            isdfltao = 1
-        endif
-        if ((isdfltsf .eq. 1).and.(isdfltao .eq. 1)) then
+        ipack=0
+        if((icode1 .eq. 0) .and. (icode2 .eq. 0)) then
+          isdfltao = 0
+          isdfltsf = 0
+          if (abs(xscale - 1.0) .lt. 1.0e-10) then
+              isdfltsf = 1
+          endif
+          if (abs(xoff) .lt. 1.0e-10) then
+              isdfltao = 1
+          endif
+          if ((isdfltsf .eq. 1).and.(isdfltao .eq. 1)) then
 C        if((xscale.eq.1).and.(xoff.eq.0))then
-          call ncvinq(inet, ivar, varname, vartype, ndims, dims, natts,
-     +               rtncode)
-          if (rtncode .ne. ncnoerr) then
-              print *, 'Error calling nf_inq_vartype.'
-              stop
-          endif
-          if (vartype .eq. ncshort) then
-              ipack = 1
+            call ncvinq(inet, ivar, varname, vartype, ndims, 
+     +       dims, natts,rtncode)
+            if (rtncode .ne. ncnoerr) then
+                print *, 'Error calling nf_inq_vartype.'
+                stop
+            endif
+            if (vartype .eq. ncshort) then
+                ipack = 1
+            else
+                ipack = 0
+            endif
           else
-              ipack = 0
+            ipack=1
           endif
-        else
-         ipack=1
         endif
-      endif
 c
         if(idbg.eq.2.and.idbg2.eq.1)then
           write(*,*)'pack: ',ipack
@@ -1535,61 +1541,61 @@ c
 C     LOOP THROUGH 1 YEAR OF DATA, UNPACK ARRAY, UNPACK TIME
 C     AND READ HEADER
 
-         if(ipack.eq.1)then
-           call ncvgt(inet,ivar,start,count,idata,icode)
-           call unpack(idata,x,xscale,xoff,miss,ilon,jlat)
-         else
-	   if(vartype.eq.5)then
-             call ncvgt(inet,ivar,start,count,x,icode)
-             call real2real(x,rmiss,ilon,jlat)
-	   elseif(vartype.eq.6)then
-             call ncvgt(inet,ivar,start,count,ddata,icode)
-             call dble2real(ddata,x,dmiss,ilon,jlat)
-	   endif
-         endif
+          if(ipack.eq.1)then
+            call ncvgt(inet,ivar,start,count,idata,icode)
+            call unpack(idata,x,xscale,xoff,miss,ilon,jlat)
+          else
+            if(vartype.eq.5)then
+              call ncvgt(inet,ivar,start,count,x,icode)
+              call real2real(x,rmiss,ilon,jlat)
+            elseif(vartype.eq.6)then
+              call ncvgt(inet,ivar,start,count,ddata,icode)
+              call dble2real(ddata,x,dmiss,ilon,jlat)
+            endif
+          endif
 c
-         if(itype_time.eq.4) then ! Integer time
-           call ncvgt(inet,itimeid,it,1,ixtime,icode)
-	   xtime= dble(ixtime)
-         elseif(itype_time.eq.5) then ! Real time
-           call ncvgt(inet,itimeid,it,1,rxtime,icode)
-	   xtime= dble(rxtime)
-         elseif(itype_time.eq.6) then ! Double precision time
-           call ncvgt(inet,itimeid,it,1,xtime,icode)
-         else
-           write(*,*)'ERROR: Need to add code for',
-     * 'itype_time=',itype_time
-           stop
-         endif
+          if(itype_time.eq.4) then ! Integer time
+            call ncvgt(inet,itimeid,it,1,ixtime,icode)
+	          xtime= dble(ixtime)
+          elseif(itype_time.eq.5) then ! Real time
+            call ncvgt(inet,itimeid,it,1,rxtime,icode)
+	          xtime= dble(rxtime)
+          elseif(itype_time.eq.6) then ! Double precision time
+            call ncvgt(inet,itimeid,it,1,xtime,icode)
+          else
+            write(*,*)'ERROR: Need to add code for',
+     *      'itype_time=',itype_time
+            stop
+          endif
 ckk         if(idbg.eq.2)write(*,*)'xtime: ',xtime
 c
-         istart2(1)=nt
-         icount2(1)=1
+          istart2(1)=nt
+          icount2(1)=1
 c
-         if(itype_time.eq.4) then ! Integer time
-           call ncvgt(inet,itimeid,istart2,icount2,ixtime,iercode)
-	   xtime= dble(ixtime)
-         elseif(itype_time.eq.5) then ! Real time
-           call ncvgt(inet,itimeid,istart2,icount2,rxtime,iercode)
-	   xtime= dble(rxtime)
-         elseif(itype_time.eq.6) then ! Double precision time
-           call ncvgt(inet,itimeid,istart2,icount2,xtime,iercode)
-         else
-           write(*,*)'ERROR: Need to add code for',
-     * 'itype_time=',itype_time
-           stop
-         endif
-         if(idbg.eq.2)write(*,*)'xtime: ',xtime
-         if(idbg.eq.2)write(7,'(I2,1x,F11.2)')itype_time,xtime   !KK 8/2/2008
+          if(itype_time.eq.4) then ! Integer time
+            call ncvgt(inet,itimeid,istart2,icount2,ixtime,iercode)
+	          xtime= dble(ixtime)
+          elseif(itype_time.eq.5) then ! Real time
+            call ncvgt(inet,itimeid,istart2,icount2,rxtime,iercode)
+	          xtime= dble(rxtime)
+          elseif(itype_time.eq.6) then ! Double precision time
+            call ncvgt(inet,itimeid,istart2,icount2,xtime,iercode)
+          else
+            write(*,*)'ERROR: Need to add code for',
+     *      'itype_time=',itype_time
+            stop
+          endif
+          if(idbg.eq.2)write(*,*)'xtime: ',xtime
+          if(idbg.eq.2)write(7,'(I2,1x,F11.2)')itype_time,xtime   !KK 8/2/2008
 c
-         if(idt.eq.0)then
-         call udparse(unitstrin,xtime,iyear,imonth,iday,ihour)
-	 elseif(idt.eq.1)then  ! ttype = 'CDO'
-	 call ttime(ttype,xtime,iyear,imonth,iday,ihour)
-	 elseif(idt.eq.2)then  ! ttype = 'fcst'
-         call udparse(unitstrin,xtime+xfcst,iyear,imonth,iday,ihour)
-	 endif
-      else
+          if(idt.eq.0)then
+            call udparse(unitstrin,xtime,iyear,imonth,iday,ihour)
+	        elseif(idt.eq.1)then  ! ttype = 'CDO'
+	          call ttime(ttype,xtime,iyear,imonth,iday,ihour)
+	        elseif(idt.eq.2)then  ! ttype = 'fcst'
+            call udparse(unitstrin,xtime+xfcst,iyear,imonth,iday,ihour)
+	        endif
+        else
           startl(1)=1
           startl(2)=1
           startl(3)=ilev
@@ -1608,57 +1614,57 @@ C     AND READ HEADER
             call unpack(idata,x,xscale,xoff,miss,ilon,jlat)
           else
 ckk            call ncvgt(inet,ivar,startl,countl,x,icode)
-	   if(vartype.eq.5)then
-             call ncvgt(inet,ivar,startl,countl,x,icode)
-             call real2real(x,rmiss,ilon,jlat)
-	   elseif(vartype.eq.6)then
-             call ncvgt(inet,ivar,startl,countl,ddata,icode)
-             call dble2real(ddata,x,dmiss,ilon,jlat)
-	   endif
+          if(vartype.eq.5)then
+            call ncvgt(inet,ivar,startl,countl,x,icode)
+            call real2real(x,rmiss,ilon,jlat)
+          elseif(vartype.eq.6)then
+            call ncvgt(inet,ivar,startl,countl,ddata,icode)
+            call dble2real(ddata,x,dmiss,ilon,jlat)
           endif
+        endif
 c
-          if(itype_time.eq.4) then ! Integer time
-            call ncvgt(inet,itimeid,it,1,ixtime,icode)
-	    xtime= dble(ixtime)
-          elseif(itype_time.eq.5) then ! Real time
-            call ncvgt(inet,itimeid,it,1,rxtime,icode)
-	    xtime= dble(rxtime)
-          elseif(itype_time.eq.6) then ! Double precision time
-            call ncvgt(inet,itimeid,it,1,xtime,icode)
-          else
-            write(*,*)'ERROR: Need to add code for',
-     * 'itype_time=',itype_time
-            stop
-          endif
+        if(itype_time.eq.4) then ! Integer time
+          call ncvgt(inet,itimeid,it,1,ixtime,icode)
+	        xtime= dble(ixtime)
+        elseif(itype_time.eq.5) then ! Real time
+          call ncvgt(inet,itimeid,it,1,rxtime,icode)
+	        xtime= dble(rxtime)
+        elseif(itype_time.eq.6) then ! Double precision time
+          call ncvgt(inet,itimeid,it,1,xtime,icode)
+        else
+        write(*,*)'ERROR: Need to add code for',
+     *  'itype_time=',itype_time
+          stop
+        endif
 ckk          if(idbg.eq.2)write(*,*)'xtime: ',xtime
 c
-          istart2(1)=nt
-          icount2(1)=1
+        istart2(1)=nt
+        icount2(1)=1
 c
-          if(itype_time.eq.4) then ! Integer time
-            call ncvgt(inet,itimeid,istart2,icount2,ixtime,iercode)
-	    xtime= dble(ixtime)
-          elseif(itype_time.eq.5) then ! Integer time
-            call ncvgt(inet,itimeid,istart2,icount2,rxtime,iercode)
-	    xtime= dble(rxtime)
-          elseif(itype_time.eq.6) then ! Double precision time
-            call ncvgt(inet,itimeid,istart2,icount2,xtime,iercode)
-          else
-            write(*,*)'ERROR: Need to add code for',
-     * 'itype_time=',itype_time
-            stop
-          endif
-          if(idbg.eq.2)write(*,*)'xtime: ',xtime
-          if(idbg.eq.2)write(7,'(I2,1x,F11.2)')itype_time,xtime   !KK 8/2/2008
+        if(itype_time.eq.4) then ! Integer time
+          call ncvgt(inet,itimeid,istart2,icount2,ixtime,iercode)
+	        xtime= dble(ixtime)
+        elseif(itype_time.eq.5) then ! Integer time
+          call ncvgt(inet,itimeid,istart2,icount2,rxtime,iercode)
+	        xtime= dble(rxtime)
+        elseif(itype_time.eq.6) then ! Double precision time
+          call ncvgt(inet,itimeid,istart2,icount2,xtime,iercode)
+        else
+          write(*,*)'ERROR: Need to add code for',
+     *    'itype_time=',itype_time
+          stop
+        endif
+        if(idbg.eq.2)write(*,*)'xtime: ',xtime
+        if(idbg.eq.2)write(7,'(I2,1x,F11.2)')itype_time,xtime   !KK 8/2/2008
 
 c
-          if(idt.eq.0)then
+        if(idt.eq.0)then
           call udparse(unitstrin,xtime,iyear,imonth,iday,ihour)
-	  elseif(idt.eq.1)then  ! ttype = 'CDO'
-	  call ttime(ttype,xtime,iyear,imonth,iday,ihour)
-	  elseif(idt.eq.2)then  ! ttype = 'fcst'
+        elseif(idt.eq.1)then  ! ttype = 'CDO'
+          call ttime(ttype,xtime,iyear,imonth,iday,ihour)
+        elseif(idt.eq.2)then  ! ttype = 'fcst'
           call udparse(unitstrin,xtime+xfcst,iyear,imonth,iday,ihour)
-	  endif
+	      endif
       endif
 c
       return
@@ -1837,7 +1843,7 @@ C     Also do first check for equal increment.
       call NCPOPT(0)
       call NCAGTC(netid,timevid,'delta_t',cdeltat,25,ercode)
       if (ercode.eq.0) then
-         equalinc = 1
+        equalinc = 1
 c
 c Previously, this was called with variable id hard coded to 1.
 c This won''t work for multiple variables in the same run.
@@ -1847,7 +1853,7 @@ c
 c We will detect long term means from the ltm_range attribute.
 c That way we don''t need the variable id at all.
 c
-	call NCAGT(netid,timevid,'ltm_range',ltm_range,ercode)
+	      call NCAGT(netid,timevid,'ltm_range',ltm_range,ercode)
 
 c
 c Ugly kludge to handle different spellings of LTM.  Probably
@@ -1860,7 +1866,7 @@ c    &      cstat(1:14).eq.'long term mean') then
 c
 c If the return code from the above is zero then we have
 c and LTM file.
-	if (ercode .eq. 0) then
+	      if (ercode .eq. 0) then
 c
 c Looking for daily long term means as well as monthly.
 c
@@ -1872,46 +1878,46 @@ c           endif
 c
 c Detect both monthly and daily long term mean.
 c
-            if(inyr2d.ne.0.or.nhr.ne.0) then
-               write(0,*) 'timeindex: Warning - non-zero hourly value ',
+          if(inyr2d.ne.0.or.nhr.ne.0) then
+            write(0,*) 'timeindex: Warning - non-zero hourly value ',
      &                  'requested for a LTM file.',
      &                  'Do not know how do deal with hourly LTM.  ',
      &                  'Quiting...'
-                stop 'LTM'
-            endif
-            ltm = 1
-         endif
-         if (cdeltat(15:16).ne.'00'.or.cdeltat(18:19).ne.'00') then
-            write(0,*) 'timeindex: Error: Time increment is < hourly -'
-            write(0,*) ' cannot be handled. -Terminating.'
-            stop
-         endif
-         if (cdeltat(7:7).eq.'1') then 
-            monthly = 1
-         else if (cdeltat(7:7).eq.'3') then 
-            seasonal = 1
-         else if (cdeltat(10:10).eq.'1') then
-            daily = 1
-         else if (cdeltat(7:7).ne.'1'.and.cdeltat(7:7).ne.'3'.and.
-     $            cdeltat(7:7).ne.'0') then
-            write(0,*) 'timeindex: Error:',
+            stop 'LTM'
+          endif
+          ltm = 1
+        endif
+        if (cdeltat(15:16).ne.'00'.or.cdeltat(18:19).ne.'00') then
+          write(0,*) 'timeindex: Error: Time increment is < hourly -'
+          write(0,*) ' cannot be handled. -Terminating.'
+          stop
+        endif
+        if (cdeltat(7:7).eq.'1') then 
+          monthly = 1
+        else if (cdeltat(7:7).eq.'3') then 
+          seasonal = 1
+        else if (cdeltat(10:10).eq.'1') then
+          daily = 1
+        else if (cdeltat(7:7).ne.'1'.and.cdeltat(7:7).ne.'3'.and.
+     $    cdeltat(7:7).ne.'0') then
+          write(0,*) 'timeindex: Error:',
      $                 'Cannot handle a delta_t with months increment',
      $                 'other than 0000-01-00 and 0000-03-00.',
      $                 'Your delta_t = ', cdeltat
-            stop 'Monthly Delta T'
-         endif
+          stop 'Monthly Delta T'
+        endif
       endif
       call NCPOPT(NCVERBOS+NCFATAL)
 
 C     Get the time index.
 
       if (ltm.eq.1 .and. monthly.eq.1) then
-         itime=(nmn-mn1)+1
-         found = 1
+        itime=(nmn-mn1)+1
+        found = 1
       elseif ( ltm.eq.1 .and. daily.eq.1) then
-         call xhour(yr1,mn1,dy1,hr1,xhour1)
-         call xhour(yr2,mn2,dy2,hr2,xhour2)
-         hourinc = xhour2 - xhour1
+        call xhour(yr1,mn1,dy1,hr1,xhour1)
+        call xhour(yr2,mn2,dy2,hr2,xhour2)
+        hourinc = xhour2 - xhour1
 c
 c Well, this looks ugly.
 c Previously, these xhour values were computed from the year 0.
@@ -1921,129 +1927,129 @@ c ltm values off by a day.  Instead, since we know it''s a ltm
 c already from the statistic attribute, we use year 1 for
 c the xhour calculations.  rhs 1/8/95
 c
-         if (daily.eq.1.or.hourinc.eq.24) then
+        if (daily.eq.1.or.hourinc.eq.24) then
 c           call xhour(yr1,mn1,dy1,0,xhour1)
 c           call xhour(yr2,mn2,dy2,0,xhour2)
 c           call xhour(inyr4d,nmn,ndy,0,xhourin)
-            call xhour(1,mn1,dy1,0,xhour1)
-            call xhour(1,mn2,dy2,0,xhour2)
-            call xhour(1,nmn,ndy,0,xhourin)
-         else
-            call xhour(inyr4d,nmn,ndy,nhr,xhourin)
-         endif
-         itime = INT(((xhourin - xhour1)/hourinc) + 0.5)
-         itime = itime + 1
-         found = 1
+          call xhour(1,mn1,dy1,0,xhour1)
+          call xhour(1,mn2,dy2,0,xhour2)
+          call xhour(1,nmn,ndy,0,xhourin)
+        else
+          call xhour(inyr4d,nmn,ndy,nhr,xhourin)
+        endif
+        itime = INT(((xhourin - xhour1)/hourinc) + 0.5)
+        itime = itime + 1
+        found = 1
       elseif (monthly.eq.1) then
-         itime=(((inyr4d*12)+nmn)-((yr1*12)+mn1))
-         itime=itime+1
-         found = 1
+        itime=(((inyr4d*12)+nmn)-((yr1*12)+mn1))
+        itime=itime+1
+        found = 1
       elseif (seasonal.eq.1) then
-         itime=(((inyr4d*12)+nmn)-((yr1*12)+mn1))/3
-         itime=itime+1
-         found = 1
+        itime=(((inyr4d*12)+nmn)-((yr1*12)+mn1))/3
+        itime=itime+1
+        found = 1
       elseif (equalinc.eq.1) then
-         call xhour(yr1,mn1,dy1,hr1,xhour1)
-         call xhour(yr2,mn2,dy2,hr2,xhour2)
-         hourinc = xhour2 - xhour1
-         if (daily.eq.1.or.hourinc.eq.24) then
-            call xhour(yr1,mn1,dy1,0,xhour1)
-            call xhour(yr2,mn2,dy2,0,xhour2)
-            call xhour(inyr4d,nmn,ndy,0,xhourin)
-         else
-            call xhour(inyr4d,nmn,ndy,nhr,xhourin)
-         endif
-         itime = INT(((xhourin - xhour1)/hourinc) + 0.5)
-         itime = itime + 1
-         found = 1
+        call xhour(yr1,mn1,dy1,hr1,xhour1)
+        call xhour(yr2,mn2,dy2,hr2,xhour2)
+        hourinc = xhour2 - xhour1
+        if (daily.eq.1.or.hourinc.eq.24) then
+          call xhour(yr1,mn1,dy1,0,xhour1)
+          call xhour(yr2,mn2,dy2,0,xhour2)
+          call xhour(inyr4d,nmn,ndy,0,xhourin)
+        else
+          call xhour(inyr4d,nmn,ndy,nhr,xhourin)
+        endif
+        itime = INT(((xhourin - xhour1)/hourinc) + 0.5)
+        itime = itime + 1
+        found = 1
       else
-         write(0,*) 'Cannot assume consistant delta time for ',
+        write(0,*) 'Cannot assume consistant delta time for ',
      &			'finding index (no delta_t attribute)'
-         write(0,*) 'This may take a while ...'
-         found = 0
+        write(0,*) 'This may take a while ...'
+        found = 0
 
 C        Inverse parse the date for comparisons - and move through the 
 C        time values searching for the one we want.
 
-         if (timeunit(1:1).eq.'y'.or.timeunit(1:1).eq.'Y') then
-            inxtime = inyr4d*10000000000.d0 + nmn*100000000.d0 +
+        if (timeunit(1:1).eq.'y'.or.timeunit(1:1).eq.'Y') then
+          inxtime = inyr4d*10000000000.d0 + nmn*100000000.d0 +
      &                ndy*1000000. + nhr*10000.
-         else
-            unitptr = UTMAKE()
-            ercode = UTDEC(timeunit(1:lnblnk(timeunit)),unitptr)
-            if (ercode.ne.0) then
-               call uduerr(ercode,'UTDEC','')
-               write(0,*) ''
-               write(0,*) 'NOTE: You must call netop_init to use 
-     &				gridread,'
-               write(0,*) '      gridreadx, dayread, and dayreadx'
-               stop
-            endif
-            ercode = UTICALTIME(inyr4d,nmn,ndy,nhr,0,0.,unitptr,inxtime)
-            if (ercode.ne.0) then
-               call uduerr(ercode,'UTICALTIME','')
-               write(0,*) ' '
-               write(0,*) 'Something wrong with finding time increment'
-               write(0,*) 'Terminating'
-               stop
-            endif
-            call UTFREE(unitptr)
-         endif
+        else
+          unitptr = UTMAKE()
+          ercode = UTDEC(timeunit(1:lnblnk(timeunit)),unitptr)
+          if (ercode.ne.0) then
+            call uduerr(ercode,'UTDEC','')
+            write(0,*) ''
+            write(0,*) 'NOTE: You must call netop_init to use', 
+     &				'gridread,'
+            write(0,*) '      gridreadx, dayread, and dayreadx'
+            stop
+          endif
+          ercode = UTICALTIME(inyr4d,nmn,ndy,nhr,0,0.,unitptr,inxtime)
+          if (ercode.ne.0) then
+            call uduerr(ercode,'UTICALTIME','')
+            write(0,*) ' '
+            write(0,*) 'Something wrong with finding time increment'
+            write(0,*) 'Terminating'
+            stop
+          endif
+          call UTFREE(unitptr)
+        endif
 
 C        See if time is in first group of time values gotten from file
 
-         do i = 1,icount(1)
-            if (xtime(i).eq.inxtime) then
-               itime = i
-               found = 1
-            endif
-         enddo
-         if (icount(1).eq.idimt) then
-            write(0,*) 'Could not find desired time increment'
-            write(0,*) ' - Terminating'
-            stop
-         endif
+        do i = 1,icount(1)
+          if (xtime(i).eq.inxtime) then
+            itime = i
+            found = 1
+          endif
+        enddo
+        if (icount(1).eq.idimt) then
+          write(0,*) 'Could not find desired time increment'
+          write(0,*) ' - Terminating'
+          stop
+        endif
 
 C        Step through file getting groups of values and seeing if it''s in there
 
-         istart(1) = istart(1) + icount(1)
-         do while (found.eq.0.and.istart(1)+icount(1).le.idimt)
-            call NCVGT(netid,timevid,istart,icount,xtime,ercode)      
-            do i = 1,icount(1)
-               if (xtime(i).eq.inxtime) then
-                  itime = (istart(1) + i) - 1
-                  found = 1
-               endif
-            enddo
-         enddo
+        istart(1) = istart(1) + icount(1)
+        do while (found.eq.0.and.istart(1)+icount(1).le.idimt)
+          call NCVGT(netid,timevid,istart,icount,xtime,ercode)      
+          do i = 1,icount(1)
+            if (xtime(i).eq.inxtime) then
+              itime = (istart(1) + i) - 1
+              found = 1
+            endif
+          enddo
+        enddo
 
 C        Check the last group of time values in the file 
-         if (found.eq.0) then
-            icount(1) = (idimt - istart(1)) + 1
-            call NCVGT(netid,timevid,istart,icount,xtime,ercode)
-            do i = 1,icount(1)
-               if (xtime(i).eq.inxtime) then
-                  itime = (istart(1) + i) - 1
-                  found = 1
-               endif
-            enddo
-         endif
+        if (found.eq.0) then
+          icount(1) = (idimt - istart(1)) + 1
+          call NCVGT(netid,timevid,istart,icount,xtime,ercode)
+          do i = 1,icount(1)
+            if (xtime(i).eq.inxtime) then
+              itime = (istart(1) + i) - 1
+              found = 1
+            endif
+          enddo
+        endif
 
-         if (found.eq.0) then
-            write(0,*) 'Could not find desired time increment'
-            write(0,*) ' - Terminating'
-            stop
-         endif
+        if (found.eq.0) then
+          write(0,*) 'Could not find desired time increment'
+          write(0,*) ' - Terminating'
+          stop
+        endif
 
       endif
 
       if(itime.gt.idimt)then
-         write(0,*)'You are requesting a time past the end of the file'
-         istart(1)=idimt
-         icount(1)=1
-         call NCVGT(netid,timevid,istart,icount,xtime,ercode)
-         call udparse(timeunit,xtime(1),iyear,imonth,iday,ihour)         
-         write(0,*)' last day of file is: ',iyear,imonth,iday,ihour
+        write(0,*)'You are requesting a time past the end of the file'
+        istart(1)=idimt
+        icount(1)=1
+        call NCVGT(netid,timevid,istart,icount,xtime,ercode)
+        call udparse(timeunit,xtime(1),iyear,imonth,iday,ihour)         
+        write(0,*)' last day of file is: ',iyear,imonth,iday,ihour
       endif
       if(itime.le.0)then
         print*,'you asked for a time before first day of the dataset'
@@ -2107,11 +2113,11 @@ C     CALCULATE DAYS FROM JAN 1 Year 1
 
       if(im.gt.1)then
         do imm=1,im-1
-           if((mod(inyear,4).eq.0).and.(inyear.ne.0))then
-             xdays=xdays+imonthl(imm)
-           else
-             xdays=xdays+imonth(imm)
-           endif
+          if((mod(inyear,4).eq.0).and.(inyear.ne.0))then
+            xdays=xdays+imonthl(imm)
+          else
+            xdays=xdays+imonth(imm)
+          endif
         enddo
       endif
 
@@ -2352,8 +2358,8 @@ c * Copy x to y in case it is not processed by the options like iflip
 c
       do i=1,nlons
         do j=1,nlats
-	  y(i,j)= x(i,j)
-	enddo
+          y(i,j)= x(i,j)
+        enddo
       enddo
 c
 c * Usually need to flip x into y so that latitudes are from S to N
@@ -2384,59 +2390,59 @@ c
 c
       if(iadd360.eq.1)then
         dlon= lons(2) -lons(1)
-	xlon360= lons(nlons) +dlon
-	if(lons(1).eq.0.and.xlon360.eq.360)then
-	  do j=1,nlats
-	    y(nlons+1,j)= y(1,j)
-	  enddo
-	  lons(nlons+1)= xlon360
-	  nlonsx= nlons +1
-	else
-	  write(*,*)'ERROR: First or last longitude is not'
-	  write(*,*)'consistent with -G option'
-	  write(*,*)'lons (1)=',lons(1),' lons (',nlons,')=',lons(nlons)
-	  write(*,*)'ABORT: Due to error'
-	  stop
-	endif
+        xlon360= lons(nlons) +dlon
+        if(lons(1).eq.0.and.xlon360.eq.360)then
+          do j=1,nlats
+            y(nlons+1,j)= y(1,j)
+          enddo
+          lons(nlons+1)= xlon360
+          nlonsx= nlons +1
+        else
+          write(*,*)'ERROR: First or last longitude is not'
+          write(*,*)'consistent with -G option'
+          write(*,*)'lons (1)=',lons(1),' lons (',nlons,')=',lons(nlons)
+          write(*,*)'ABORT: Due to error'
+          stop
+        endif
       endif
 c
 c * Append y to concatenated conmap file
 c
-        write(lunit)nlats
-        if(iflip.eq.1)then
-          write(lunit)(lats(j),j=nlats,1,-1) ! Order is N to S; require S to N
-        else
-          write(lunit)(lats(j),j=1,nlats)    ! Order already correct
-        endif
-        write(lunit)nlonsx
-        write(lunit)(lons(i),i=1,nlonsx)
-        write(lunit)head
+      write(lunit)nlats
+      if(iflip.eq.1)then
+        write(lunit)(lats(j),j=nlats,1,-1) ! Order is N to S; require S to N
+      else
+        write(lunit)(lats(j),j=1,nlats)    ! Order already correct
+      endif
+      write(lunit)nlonsx
+      write(lunit)(lons(i),i=1,nlonsx)
+      write(lunit)head
 c
 c * For ERA40 geopotential need to divide by g - see parameter statement
 c
-	if(rtype.eq.'ERA40'.and.vtype(1:1).eq.'Z')then
-          do j=1,nlats
-	    do i=1,nlonsx
-                y(i,j)= y(i,j)/g  ! Convert to gepotential height (metres)
-	    enddo
+	    if(rtype.eq.'ERA40'.and.vtype(1:1).eq.'Z')then
+        do j=1,nlats
+          do i=1,nlonsx
+                    y(i,j)= y(i,j)/g  ! Convert to gepotential height (metres)
           enddo
-	endif
+        enddo
+	    endif
 c
 c * Additional user scaling e.g. uscal= 0.01 for Pa -> hPa (KK)
 c
-        if(iscal.eq.1)then
-          do j=1,nlats
-            do i=1,nlonsx
-              if(y(i,j).ne.xmiss)then  ! Was x(i,j) 
-                y(i,j)=y(i,j)*uscal
-              endif
-            enddo
+      if(iscal.eq.1)then
+        do j=1,nlats
+          do i=1,nlonsx
+            if(y(i,j).ne.xmiss)then  ! Was x(i,j) 
+              y(i,j)=y(i,j)*uscal
+            endif
           enddo
-        endif
+        enddo
+      endif
 c
 c * Write out array y
 c
-        write(lunit)((y(i,j),i=1,nlonsx),j=1,nlats)
+      write(lunit)((y(i,j),i=1,nlonsx),j=1,nlats)
 c
       return
       end
@@ -2476,13 +2482,13 @@ ckk      parameter (zmiss=1e30)
       real y(ilon,jlat)
 
       do i=1,ilon
-         do j=1,jlat
+          do j=1,jlat
             if(x(i,j).eq.miss)then
                y(i,j)=zmiss
             else
               y(i,j)=real(x(i,j))
-           endif
-         enddo
+            endif
+          enddo
       enddo
 
       return
@@ -2498,11 +2504,11 @@ ckk      parameter (zmiss=1e30)
       real x(ilon,jlat),miss
 
       do i=1,ilon
-         do j=1,jlat
+          do j=1,jlat
             if(x(i,j).eq.miss)then
-               x(i,j)=zmiss
-           endif
-         enddo
+              x(i,j)=zmiss
+            endif
+          enddo
       enddo
 
       return
