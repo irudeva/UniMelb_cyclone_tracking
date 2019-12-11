@@ -1,4 +1,16 @@
       program read_nc2cmp
+
+c-------------------------------------------------------------------------
+c 
+c  Modified 11/12/2019, Ahmad Galea (Science IT University of Melbourne)
+c
+c  (1) Indentation fix
+c  (2) Increased grid resolution: mlon=1441,nlat=721 
+c       corresponds to a global 0.25 x 0.25 grid
+c  (3) Updated -G option to duplicate data at lon 0 to 720 (was 0 to 360)
+c
+c-------------------------------------------------------------------------
+
 c 
 c * Purpose: To provide decoding of NetCDF data to 'conmap' format
 c   mainly for subsequent processing by the cyclone tracking software.
@@ -116,15 +128,15 @@ c * Changed to COMMON KK 18/5/2006
 c
 c * Note: mlon=721,nlat=361 corresponds to a global 0.5 x 0.5 grid
 c
-      parameter (mlon=721)
-      parameter (mlat=361)
+      parameter (mlon=1441)
+      parameter (mlat=721)
       real x(mlon,mlat)
       integer*2 work(mlon,mlat)
       real*8 work2(mlon,mlat)
       common /blk1/x,work,work2
 c
 c * Extra real work array for flipping x for conmap form
-c   or duplicating lon 360 == lon 0
+c   or duplicating lon 720 == lon 0
 c
       real rwork(mlon,mlat)
 c
@@ -228,7 +240,7 @@ c
         write(*,*)'Options: '
         write(*,*)'D: 0= None 1= Basic 2= Verbose',
      *	' 3= Print dimension arrays to file fort.10'
-        write(*,*)'G: Duplicate data at lon to 360 (default: no)'
+        write(*,*)'G: Duplicate data at lon to 720 (default: no)'
         write(*,*)'S: Output one file per time (default: all in one)'
 	      write(*,*)'T: ttype: CDO, fcst'
 	      write(*,*)'   fcst: Adds 6 hr to date-time; use with',
@@ -272,7 +284,7 @@ c
         nuvar= 1
         nunvar= 0
         nutvar= 0
-        iadd360= 0
+        iadd720= 0
         cmpfile=''
         narg= iargc()
         i= 0
@@ -393,7 +405,7 @@ c
             call getarg(i,optarg)
             read(optarg,*)idbg
           elseif(optarg.eq.'-G')then
-            iadd360= 1 
+            iadd720= 1 
           elseif(optarg.eq.'-L')then
 c
             i= i +1
@@ -721,10 +733,10 @@ c * Ensure that real array lons is set
 c
 c * Check for -G option
 c
-      if(iadd360.eq.1)then
+      if(iadd720.eq.1)then
         dlon= lons(2) -lons(1)
-        xlon360= lons(nlons) +dlon
-        if(lons(1).eq.0.and.xlon360.eq.360)then
+        xlon720= lons(nlons) +dlon
+        if(lons(1).eq.0.and.xlon720.eq.720)then
           write(*,*)'NOTE: Grid consistent with -G option'
         else
           write(*,*)'ERROR: First or last longitude is not'
@@ -1146,7 +1158,7 @@ c
 700     format(I6,':',A)
               kmap= kmap +1
               call x2cmp (vtype,rtype,nlons,nlats,lons,lats,head,x,
-     *        rwork,iscal,uscal,iadd360,2)
+     *        rwork,iscal,uscal,iadd720,2)
               if(isepf.eq.1)then
                 if(kv.eq.nuvar.and.l.eq.ilev2)close(2)
                 endif
@@ -1186,7 +1198,7 @@ c
               write(*,700)it,head ! Write on screen just prior to output
               kmap= kmap +1
               call x2cmp (vtype,rtype,nlons,nlats,lons,lats,head,x,
-     *        rwork,iscal,uscal,iadd360,2)
+     *        rwork,iscal,uscal,iadd720,2)
               if(isepf.eq.1)then
                 if(kv.eq.nuvar.and.l.eq.ilev2)close(2)
                 endif
@@ -1326,8 +1338,8 @@ C      integer UTMAKE,UTDEC,uttime
 C     declare everything else
 
 c * Note: mlon=721,nlat=361 corresponds to a global 0.5 x 0.5 grid
-      parameter (mlon=721)
-      parameter (mlat=480)
+      parameter (mlon=1441)
+      parameter (mlat=721)
       real x(mlon,mlat)
       integer*2 idata(mlon,mlat)
       real*8 ddata(mlon,mlat)
@@ -2328,14 +2340,14 @@ c ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 c ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
 
       subroutine x2cmp(vtype,rtype,nlons,nlats,lons,lats,head,x,y,
-     * iscal,uscal,iadd360,lunit)
+     * iscal,uscal,iadd720,lunit)
 c
 c * Modified: Kevin Keay  Date: Apr 14 2009
 c
-c * Notes: If iadd360 is 1 then the data at lon 0 is duplicated to 360
+c * Notes: If iadd720 is 1 then the data at lon 0 is duplicated to 720
 c   See -G option in main program
 c
-c * Note: Array y has an extra column to hold lon 360 data
+c * Note: Array y has an extra column to hold lon 720 data
 c   This is a work array from the calling program of size (mlon,mlat)
 c
       real x(nlons,nlats),y(nlons+1,nlats)
@@ -2343,7 +2355,7 @@ c
       integer iscal
       real uscal
       character*80 head
-      integer lunit,iadd360
+      integer lunit,iadd720
 c
       character vtype*5, rtype*5
 c
@@ -2380,7 +2392,7 @@ c
         enddo
       endif
 c
-c * Duplicate data at lon 0 to 360
+c * Duplicate data at lon 0 to 720
 c
 c * Note: nlonsx is the final number of longitudes
 c   This value is only used in this routine i.e. the
@@ -2388,14 +2400,14 @@ c   original array size is not changed
 c
       nlonsx= nlons
 c
-      if(iadd360.eq.1)then
+      if(iadd720.eq.1)then
         dlon= lons(2) -lons(1)
-        xlon360= lons(nlons) +dlon
-        if(lons(1).eq.0.and.xlon360.eq.360)then
+        xlon720= lons(nlons) +dlon
+        if(lons(1).eq.0.and.xlon720.eq.720)then
           do j=1,nlats
             y(nlons+1,j)= y(1,j)
           enddo
-          lons(nlons+1)= xlon360
+          lons(nlons+1)= xlon720
           nlonsx= nlons +1
         else
           write(*,*)'ERROR: First or last longitude is not'
