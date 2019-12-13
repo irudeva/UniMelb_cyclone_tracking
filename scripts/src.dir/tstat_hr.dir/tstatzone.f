@@ -1,3 +1,9 @@
+c-------------------------------------------------------------------------------
+c     Modified 09/12/2019, Ahmad Galea (Science IT University of Melbourne)
+c     
+c     Date format changed from yymmdd to yyyymmdd.
+c-------------------------------------------------------------------------------
+      
       Subroutine tstatzone(irun,dystrts,dystops,hrstrts,hrstops,
      * hemis,level,feat,dts,dlat,lslt,rproj,projn,diss2,djss1,dmodet,
      * zdet,adet,exfmt)
@@ -20,7 +26,7 @@
         write (rfmt,'('' RUN '',i4,'' DAYS '',i3,'' - '',i3,'' '')')
      *   irun,dystrts,dystops
       else
-        write (rfmt,'(i6,i4,'' - '',i6,i4,'' '')')
+        write (rfmt,'(i8,i4,'' - '',i8,i4,'' '')')
      *   dystrts,hrstrts,dystops,hrstops
       endif
       write (qfmt,'(a4,x,a6,x,a12,'' (LASTING '',f5.3,'' DAYS)'')')

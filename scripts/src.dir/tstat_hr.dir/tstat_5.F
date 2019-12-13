@@ -10,7 +10,15 @@ c       was modified to give original (Sun f77) behaviour.
 c       Introduced extra namelist (nmltstat) parameter ssd to output
 c       scaled SD e.g. ssd=1000., SD x 1000
 c
+
       parameter (sixth=1./6.)
+
+
+c-------------------------------------------------------------------------------
+c     Modified 09/12/2019, Ahmad Galea (Science IT University of Melbourne)
+c     
+c     Date format changed from yymmdd to yyyymmdd.
+c-------------------------------------------------------------------------------
 
 #include "tstat1.h"
 
@@ -711,9 +719,9 @@ ckk          read (36,'(/13x,i3)') nlons !KK 13/12/2003
         endif
         llhead(8:20)  = level(1:lnblnk(level))
         llhead(31:40) = source(1:10)
-        write (llhead(43:48),'(i6)') dystrts
+        write (llhead(43:50),'(i8)') dystrts
         llhead(49:49) = '-'
-        write (llhead(50:55),'(i6)') dystops
+        write (llhead(52:57),'(i8)') dystops
 
         dellat = (lats(nlats-1)-lats(2))/float(nlats-3)
         dellon = (lons(nlons-1)-lons(2))/float(nlons-3)

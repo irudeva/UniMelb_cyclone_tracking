@@ -11,6 +11,15 @@ c     tr3rda     Read  of individual track (point data)
 c     Written by Ross Murray
 c     Last revised 12th May, 1996.
 
+c-------------------------------------------------------------------------------
+c     Modified 13/12/2019, Ahmad Galea (Science IT University of Melbourne)
+c     
+c     - Date format changed from yymmdd to yyyymmdd.
+c
+c-------------------------------------------------------------------------------
+
+
+
 c-----------------------------------------------------------------------
 c     Declarations
 c-----------------------------------------------------------------------
@@ -285,8 +294,8 @@ c-----------------------------------------------------------------------
           isw(ivar) = 14+ivel
   430   continue
       endif
-      write (fmt,'(''(2x,f8.4,2x,i6,x,i4,3x,i1,i1,2x,i3,2x,i2,2x,'',
-     * ''f5.3,t45,'',i2,''f9.3)'')') nvarc+nvart-1
+      write (fmt,'(''(f10.4,2x,i8,1x,i4,3x,i1,i1,2x,i3,2x,i2,2x,'',
+     * '''',i2,''f9.3)'')') nvarc+nvart
         
       if (idiagt.ge.1) then
         write (6,'(/a)') ' Tabulated variables:' 
