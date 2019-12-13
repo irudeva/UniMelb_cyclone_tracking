@@ -2,7 +2,7 @@
 # (1) 8/9/2006 : allows for 200 centres per track (max seenm so far is 142)
 
 FC = gfortran
-FFLAGS = -c  -fbounds-check -finit-local-zero -g 
+FFLAGS = -c  -fbounds-check -finit-local-zero   #-g 
 
 SRCS.TRAKA  = track.F cycio_1.F trackio.F update.F splithist.F lasthist.F match.F predict.F prob.F tracksum.F predvl.F 
 SRCS.TRAKB = timedif.f srchls.f ngtopt.f globtest.f bisplcf.f isplcf.f llexpand.f psconv.f getwds.f qmapread.f
