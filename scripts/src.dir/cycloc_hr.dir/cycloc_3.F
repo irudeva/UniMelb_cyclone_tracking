@@ -249,6 +249,8 @@ c------------------------------------------------------------------------------
       zpwrit    = .false.  ! 
       zswrit    = .false.  ! 
       zlwrit    = .false.  ! 
+      upredg    = .false.  !
+      upredu    = .false.  !
       llform    = .false.  !
       fpdata    = .false.  ! PS data expected
       zpdata    = .false.  ! PS topography data expected
@@ -1486,7 +1488,7 @@ c           ------------------------------------------------------
             if (imap.eq.1) write (6,'('' Reading PS data from file: '',
      *       a40)') fpfile(1:40)
 
-            if (diag) write (6,'(/a,2x,i6,x,i4,t60,2f10.2/a,t50,f10.2)') 
+            if (diag) write (6,'(/a,2x,i8,x,i4,t60,2f10.2/a,t50,f10.2)') 
      *       ' Start reading data: ',da,hr,eetimex-eetimey,eetimex,
      *       ' PS data read: ',ddtime()
 
