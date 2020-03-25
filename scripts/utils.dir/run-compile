@@ -32,6 +32,7 @@ cmp2cdl4 \
 catcon2cdl \
 cycadjtime \
 excycdat \
+edcycdat \
 readcmp \
 readgribn \
 splitcon \
@@ -41,7 +42,8 @@ trk2map )
 
 foreach f ($ff)
   echo "Compiling" $f "..."
-  $FC -o $UBIN/$f $f.f -std=legacy
+  $FC -o $UBIN/$f $f.f -std=legacy 
+  #-fbacktrace -g -O0 # debugging flags
   ls -l $UBIN/$f
 end
 
